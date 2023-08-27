@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+D:\JP302_Khai\Built_2023\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1767431735.index
+4215308376.index
+1048905272.index
+3217854283.index
+170999955.index
+858047597.index
+1241894022.index

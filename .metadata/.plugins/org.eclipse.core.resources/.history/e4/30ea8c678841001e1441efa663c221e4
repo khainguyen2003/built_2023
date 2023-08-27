@@ -1,0 +1,9 @@
+Các đoạn code header, footer, sidebar có nội dung ít thay đổi nên có thể tách riêng để sử dụng lại
+- copy view, đổi tên thành UserList và đổi đường dẫn WebServlet view-> /user/list
+
+package jsoft.library
+	- class utilities
+	
+\\ user profile
+- Nếu user là admin thì người dùng có quyền thay đổi mật khẩu người khác. Nếu không thì người dùng
+ chỉ có thể thay đổi mật khẩu cũ của mình

@@ -1,0 +1,79 @@
+/*Các xử lý định dạng cho loginv3.html - phien bản bootstrap 5.2.2*/
+/*Fonts*/
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,700;1,800;1,900&display=swap");
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.loginview {
+  height: auto;
+}
+
+#password-box {
+  position: relative;
+}
+#show-btn {
+  position: absolute;
+  top: 2%;
+  right: 6%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+#show-btn::before {
+  content: "\f06e";
+  font-family: fontAwesome;
+}
+#show-btn.show::before {
+  content: "\f070";
+}
+.validation {
+  background: none;
+  padding: 20px;
+  margin-bottom: 0;
+}
+.validation li {
+  position: relative;
+  font-weight: 400;
+  list-style: none;
+  font-size: 16px;
+  color: #333;
+}
+.validation li::before {
+  content: "\f057";
+  font-family: fontAwesome;
+  width: 30px;
+  height: 10px;
+  display: inline-flex;
+  color: #ff1e1e;
+  transition: 0.5s;
+}
+.validation li.valid {
+  color: rgba(0, 0, 0, 0.5);
+}
+.validation li.valid::before {
+  color: #54b435;
+  content: "\f00c";
+}
+
+@media (max-width: 575.98px) {
+  .loginview .col-sm-4 {
+    text-align: left !important;
+  }
+}
+@media (min-width: 576px) and (max-width: 767.98px) {
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+}
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+}
+@media (min-width: 1400px) {
+}

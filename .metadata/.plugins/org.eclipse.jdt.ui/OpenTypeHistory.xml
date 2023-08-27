@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+    <typeInfo handle="=jsesystem/src\/main\/java&lt;object{Person.java[Person" modifiers="1" timestamp="1679210576184"/>
+    <typeInfo handle="=jsesystem/src\/main\/java&lt;object{Manager.java[Manager" modifiers="1025" timestamp="1680007254239"/>
+    <typeInfo handle="=jsesystem/src\/main\/java&lt;object{ND.java[ND" modifiers="513" timestamp="1676798528528"/>
+    <typeInfo handle="=jsesystem/src\/main\/java&lt;object{BTTU.java[BTTU" modifiers="513" timestamp="1676798553803"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft{ConnectionPool.java[ConnectionPool" modifiers="513" timestamp="1680681500581"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft.ads.basic{Basic.java[Basic" modifiers="513" timestamp="1689584154528"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft.ads.user{User.java[User" modifiers="513" timestamp="1689584127376"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft.ads.section{Section.java[Section" modifiers="513" timestamp="1689584529142"/>
+    <typeInfo handle="=adsystem/C:\/Program Files\/Java\/jdk-17.0.1\/lib\/jrt-fs.jar`java.desktop=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/&lt;java.awt(SecondaryLoop.class[SecondaryLoop" modifiers="1537" timestamp="1640786361201"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft.ads.product{Product.java[Product" modifiers="513" timestamp="1689131494036"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft.ads.catagory{Category.java[Category" modifiers="513" timestamp="1689605295318"/>
+    <typeInfo handle="=adsystem/C:\/Program Files\/Java\/jdk-17.0.1\/lib\/jrt-fs.jar`java.xml=/javadoc_location=/https:\/\/docs.oracle.com\/en\/java\/javase\/17\/docs\/api\/=/&lt;javax.xml.catalog(Catalog.class[Catalog" modifiers="1537" timestamp="1640786361201"/>
+    <typeInfo handle="=adsystem/src\/main\/java&lt;jsoft.ads.article{Article.java[Article" modifiers="513" timestamp="1689753506819"/>
+    <typeInfo handle="=adsystem/D:\/JP302_Khai\/Setup\/tomcat\/apache-tomcat-9.0.55\/lib\/servlet-api.jar=/javadoc_location=/https:\/\/javaee.github.io\/javaee-spec\/javadocs\/=/=/owner.project.facets=/jst.web=/&lt;javax.servlet(Servlet.class[Servlet" modifiers="1537" timestamp="1683238800719"/>
+    <typeInfo handle="=adsystem/D:\/JP302_Khai\/Setup\/tomcat\/apache-tomcat-9.0.55\/lib\/servlet-api.jar=/javadoc_location=/https:\/\/javaee.github.io\/javaee-spec\/javadocs\/=/=/owner.project.facets=/jst.web=/&lt;javax.servlet(GenericServlet.class[GenericServlet" modifiers="1057" timestamp="1683238800719"/>
+</typeInfoHistroy>
