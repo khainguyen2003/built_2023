@@ -1,7 +1,6 @@
 package jsoft.ads.user;
 
 import jsoft.*;
-import org.javatuples.*;
 import jsoft.object.*;
 
 import java.util.*;

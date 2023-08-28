@@ -10,3 +10,29 @@ chỉ có thể thay đổi mật khẩu cũ của mình
 
 // Chú ý
 - Nếu 2 file servlet có cùng mapping @WebServlet("/user/profile") thì hệ thống sẽ báo lỗi
+
+// tìm hiểu Giỏ  hàng thông minh
+- có các tính năng nếu mua hàng nhiều thì sẽ được giảm giá hay tích điểm hội viên
+
+// Nguyên mẫu thiết kế -> nhìn thuộc tính của đối tượng thì thuộc tính nào là thuộc tính chọn, thuộc tính nào không cho sửa
+thuộc tính nào không cho sửa -> thuộc tính gắn với hành vi
+// Khi chỉ có các câu lênh sql thì chắc chắn autocomit là false, còn khi có câu lệnh update, insert thì phải kiểm tra autocomit. nếu autocommit là false
+thì mới  commit vd dòng 198 BasicImpl
+
+// Sẽ có 2  loại xóa: xóa tương đối và xóa tuyệt đối
++ xóa tương đối: đánh dấu trong csdl
++ xóa tuyệt đối: xóa khỏi csdl
+- Cần phải xác định ai là người xóa, vị xóa ở đâu để sau khi xóa cần trở lại đúng vị trí đó
+- Nếu admin xóa user trong danh sách thì chỉ là xóa tương đối, còn nếu  xóa trong thùng rác thì sẽ là xóa tuyệt đối
+- Nếu user có quyền cao hơn user muốn xóa nhưng không phải cha hoặc không phải admin thì không có quyền xóa
+
+// Về viết js sinh tự động alias và đổi mật khẩu
+Với tên fullname là Hoàng Quang huy thì alias là huyqh
+- Nguyễn Duy Hoàng -> hoangnd
+
+* đổi mật khẩu
+- Nếu user đổi mk cho chính user đó thì phải nhập mk cũ
+- Nếu admin đổi mk cho user thì sinh ra mật khẩu mới và gửi vào hộp thư cho user
+
+* Liên kết ảo: tạo ra một bảng ảo không có giá trị trình bày dữ liệu, lưu trữ dữ liệu. Khi thêm user mới  thì sẽ lưu user_id vào bảng đó. khi thêm sửa, xóa thì phải
+xóa liên kết ảo

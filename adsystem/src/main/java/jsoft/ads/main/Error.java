@@ -53,14 +53,23 @@ public class Error extends HttpServlet {
 			case "add": 
 				out.append("Lỗi khi cập nhật thêm mới");
 				break;
-			case "valueadd": 
-				out.append("Lỗi khi lấy giá trị thêm mới");
-				break;
 			case "edit":
 				out.append("Có lỗi khi sửa thông tin");
 				break;
+			case "del":
+				out.append("Có lỗi khi thực hiện xóa");
+				break;
+			case "valueadd": 
+				out.append("Lỗi khi lấy giá trị thêm mới");
+				break;
 			case "upd":
 				out.append("Có lỗi khi lấy giá trị sửa thông tin");
+				break;
+			case "nopermis":
+				out.append("Không có đủ quyền để xóa");
+				break;
+			case "acclogin":
+				out.append("Có lỗi khi lấy giá trị xóa");
 				break;
 			default:
 				out.append("Có lỗi xin vui lòng kiểm tra lại");

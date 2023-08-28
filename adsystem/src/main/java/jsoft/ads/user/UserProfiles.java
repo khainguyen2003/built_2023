@@ -165,7 +165,7 @@ public class UserProfiles extends HttpServlet {
 		out.append("<div class=\"tab-content pt-2\">");
 
 		String summary = "Không có thông tin", name = "Không có thông tin", fullname = "Không có thông tin",
-				address = "", email = "", phone = "", job = "", jobarea = "";
+				address = "", email = "", hphone = "", job = "", jobarea = "", ophone = "", mphone="";
 		String birthday = "";
 		short logined = euser.getUser_logined();
 		if (euser != null) {
@@ -174,7 +174,9 @@ public class UserProfiles extends HttpServlet {
 			fullname = euser.getUser_fullname();
 			address = euser.getUser_address();
 			email = euser.getUser_email();
-			phone = euser.getUser_homephone();
+			hphone = euser.getUser_homephone();
+			ophone = euser.getUser_officephone();
+			mphone = euser.getUser_mobilephone();
 			job = euser.getUser_job();
 			jobarea = euser.getUser_jobarea();
 			birthday = euser.getUser_birthday();
@@ -214,7 +216,7 @@ public class UserProfiles extends HttpServlet {
 
 		out.append("<div class=\"row\">");
 		out.append("<div class=\"col-lg-3 col-md-4 label\">Điện thoại</div>");
-		out.append("<div class=\"col-lg-9 col-md-8\">" + phone + "</div>");
+		out.append("<div class=\"col-lg-9 col-md-8\">" + hphone + "</div>");
 		out.append("</div>");
 
 		out.append("<div class=\"row\">");
@@ -234,8 +236,8 @@ public class UserProfiles extends HttpServlet {
 		out.append("<!-- Profile Edit Form -->");
 		out.append("<form method=\"post\" action=\"/adv/user/profile\">");
 		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"profileImage\" class=\"col-md-4 col-lg-3 col-form-label\">Profile Image</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<label for=\"profileImage\" class=\"col-md-3 col-lg-2 col-form-label\">Profile Image</label>");
+		out.append("<div class=\"col-md-9 col-lg-10\">");
 		out.append("<img src=\"assets/img/profile-img.jpg\" alt=\"Profile\">");
 		out.append("<div class=\"pt-2\">");
 		out.append(
@@ -246,75 +248,89 @@ public class UserProfiles extends HttpServlet {
 		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"fullName\" class=\"col-md-4 col-lg-3 col-form-label\">Họ và tên</label>");
+		out.append("<div class=\"row mb-3 align-items-center\">");
+		out.append("<label for=\"fullName\" class=\"col-md-3 col-lg-2 text-end\">Họ và tên</label>");
 		out.append("<div class=\"col-md-6 col-lg-7\">");
+		out.append("<div class=\"input-group\">");
 		out.append("<input name=\"txtFullName\" type=\"text\" class=\"form-control\" id=\"fullName\" value=\""
 				+ fullname + "\">");
+		out.append("<input name=\"txtAlias\" type=\"text\" class=\"form-control\" id=\"alias\" readonly value=\"\">");
 		out.append("</div>");
-		out.append("<div class=\"col-md-2 col-lg-2\">");
+		out.append("</div>");
+		out.append("<div class=\"col-md-3 col-lg-3\">");
 		out.append("<input name=\"txtName\" type=\"text\" class=\"form-control\" id=\"name\" disabled value=\"" + name
 				+ "\">");
 		out.append("</div>");
 		out.append("</div>");
 
 		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"notes\" class=\"col-md-4 col-lg-3 col-form-label\">Tóm tắt</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<label for=\"notes\" class=\"col-md-3 col-lg-2 col-form-label text-end\">Tóm tắt</label>");
+		out.append("<div class=\"col-md-9 col-lg-10\">");
 		out.append("<textarea name=\"txtNotes\" class=\"form-control\" id=\"notes\" style=\"height: 100px\">" + summary
 				+ "</textarea>");
 		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"birthday\" class=\"col-md-4 col-lg-3 col-form-label\">Ngày sinh</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<div class=\"row mb-3 align-items-center\">");
+		out.append("<label for=\"birthday\" class=\"col-md-3 col-lg-2 text-end\">Ngày sinh</label>");
+		out.append("<div class=\"col-md-3 col-lg-4\">");
 		out.append("<input name=\"txtBirthday\" type=\"date\" class=\"form-control\" id=\"birthday\" value=\""+birthday+"\">");
 		out.append("</div>");
+		
+		out.append("<label for=\"slcGender\" class=\"col-md-3 col-lg-2 text-end\">Giới tính</label>");
+		out.append("<div class=\"col-md-3 col-lg-4\">");
+		out.append("<select class=\"form-control\" id=\"slcGender\" name=\"slcGender\">");
+		out.append("<option value=\"\">---</option>");
+		out.append("<option value=\"0\">Nam</option>");
+		out.append("<option value=\"1\">Nữ</option>");
+		out.append("</select>");
+		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"Job\" class=\"col-md-4 col-lg-3 col-form-label\">Nghề nghiệp</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<div class=\"row mb-3 align-items-center\">");
+		out.append("<label for=\"Job\" class=\"col-md-3 col-lg-2 text-end\">Nghề nghiệp</label>");
+		out.append("<div class=\"col-md-3 col-lg-4\">");
 		out.append("<input name=\"txtJob\" type=\"text\" class=\"form-control\" id=\"Job\" value=\"" + job + "\">");
 		out.append("</div>");
-		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"jobarea\" class=\"col-md-4 col-lg-3 col-form-label\">Lĩnh vực</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<label for=\"jobarea\" class=\"col-md-3 col-lg-2 text-end\">Lĩnh vực</label>");
+		out.append("<div class=\"col-md-3 col-lg-4\">");
 		out.append("<input name=\"txtJobarea\" type=\"text\" class=\"form-control\" id=\"jobarea\" value=\"" + jobarea
 				+ "\">");
 		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"Address\" class=\"col-md-4 col-lg-3 col-form-label\">Địa chỉ</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<div class=\"row mb-3 align-items-center\">");
+		out.append("<label for=\"Address\" class=\"col-md-3 col-lg-2 text-end\">Địa chỉ</label>");
+		out.append("<div class=\"col-md-9 col-lg-10\">");
 		out.append("<input name=\"txtAddress\" type=\"text\" class=\"form-control\" id=\"Address\" value=\"" + address
 				+ "\">");
 		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"Phone\" class=\"col-md-4 col-lg-3 col-form-label\">Điện thoại</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<div class=\"row mb-3  align-items-center\">");
+		out.append("<label for=\"HPhone\" class=\"col-md-3 col-lg-2 text-end\">Điện thoại</label>");
+		out.append("<div class=\"col-md-9 col-lg-10\">");
+		out.append("<div class=\"input-group\">");
 		out.append(
-				"<input name=\"txtPhone\" type=\"text\" class=\"form-control\" id=\"Phone\" value=\"" + phone + "\">");
+				"<input name=\"txtHPhone\" type=\"text\" class=\"form-control\" id=\"HPhone\" value=\"" + hphone + "\" placeholder=\"Home phone\" title=\"Home phone\">");
+		out.append(
+				"<input name=\"txtOPhone\" type=\"text\" class=\"form-control\" id=\"OPhone\" value=\"\" placeholder=\"Office phone\" title=\"Office phone\">");
+		out.append(
+				"<input name=\"txtMPhone\" type=\"text\" class=\"form-control\" id=\"MPhone\" value=\"\" placeholder=\"Mobile phone\" title=\"Mobile phone\">");
+		out.append("</div>");
 		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"Email\" class=\"col-md-4 col-lg-3 col-form-label\">Hộp thư</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<div class=\"row mb-3 align-items-center\">");
+		out.append("<label for=\"Email\" class=\"col-md-3 col-lg-2 text-end\">Hộp thư</label>");
+		out.append("<div class=\"col-md-3 col-lg-4\">");
 		out.append(
 				"<input name=\"txtEmail\" type=\"email\" class=\"form-control\" id=\"Email\" value=\"" + email + "\">");
 		out.append("</div>");
-		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"Facebook\" class=\"col-md-4 col-lg-3 col-form-label\">Facebook Profile</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
+		out.append("<label for=\"Facebook\" class=\"col-md-3 col-lg-2 col-form-label\">Facebook</label>");
+		out.append("<div class=\"col-md-3 col-lg-4\">");
 		out.append(
 				"<input name=\"facebook\" type=\"text\" class=\"form-control\" id=\"Facebook\" value=\"https://facebook.com/#\">");
 		out.append("</div>");
@@ -451,7 +467,9 @@ public class UserProfiles extends HttpServlet {
 				String address = request.getParameter("txtAddress");
 				String job = request.getParameter("txtJob");
 				String jobarea = request.getParameter("txtJobarea");
-				String phone = request.getParameter("txtPhone");
+				String Hphone = request.getParameter("txtHPhone");
+				String Mphone = request.getParameter("txtMPhone");
+				String Ophone = request.getParameter("txtOPhone");
 				String email = request.getParameter("txtEmail");
 				String notes = request.getParameter("txtNotes");
 				String birthday = request.getParameter("txtBirthday");
@@ -460,7 +478,7 @@ public class UserProfiles extends HttpServlet {
 
 				if (fullname != null && !fullname.equalsIgnoreCase("")
 						&& email != null
-						&& !email.equalsIgnoreCase("") && phone != null && !phone.equalsIgnoreCase("")) {
+						&& !email.equalsIgnoreCase("") && Hphone != null && !Hphone.equalsIgnoreCase("")) {
 					// Tạo đối tương lưu trữ thông tin
 					UserObject nuser = new UserObject();
 					nuser.setUser_id(id);
@@ -468,7 +486,9 @@ public class UserProfiles extends HttpServlet {
 					nuser.setUser_address(jsoft.library.Utilities.encode(address));
 					nuser.setUser_parent_id(user.getUser_id());
 					nuser.setUser_email(email);
-					nuser.setUser_homephone(phone);
+					nuser.setUser_homephone(Hphone);
+					nuser.setUser_mobilephone(Mphone);
+					nuser.setUser_officephone(Ophone);
 					nuser.setUser_last_modified(jsoft.library.Utilities_date.getDate());
 					nuser.setUser_job(jsoft.library.Utilities.encode(job));
 					nuser.setUser_jobarea(jsoft.library.Utilities.encode(jobarea));

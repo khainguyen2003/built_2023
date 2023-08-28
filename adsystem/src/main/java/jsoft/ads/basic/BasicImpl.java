@@ -170,16 +170,39 @@ public class BasicImpl implements Basic {
 	 * lỗi và hoàn tác lại các thay đổi trước đó bằng cách gọi phương thức
 	 * rollback(). Cuối cùng, phương thức giải phóng bộ nhớ và trả về một đối tượng
 	 * ResultSet, chứa kết quả truy vấn, nếu truy vấn thành công.
+	 * 
+	 * Thay vì return ngay thì sẽ lấy tham chiếu của 1 query
 	 */
 	@Override
-	public ResultSet get(String sql, String name, String pass) {
+	public synchronized ResultSet get(ArrayList<String> sql, String name, String pass) {
 		try {
-			PreparedStatement pre = this.con.prepareStatement(sql);
+			String sql_select = sql.get(0);
+			PreparedStatement pre = this.con.prepareStatement(sql_select);
 
 			pre.setString(1, name);
 			pre.setString(2, pass);
+			
+			ResultSet rs = pre.executeQuery();
+			if(rs != null) {
+				String str_update = sql.get(1);
+				PreparedStatement preUpdate = this.con.prepareStatement(str_update);
+				preUpdate.setString(1, name);
+				preUpdate.setString(2, pass);
+				
+				int result = preUpdate.executeUpdate();
+				if(result == 0) {
+					this.con.rollback();
+					return null;
+				} else {
+					// khi có câu lệnh update, insert thì phải kiểm tra autocomit. nếu autocommit là false thì mới  commit
+					if(!this.con.getAutoCommit()) {
+						this.con.commit();
+						
+					}
+					return rs;
+				}
+			}
 
-			return pre.executeQuery();
 		} catch (SQLException e) {
 			// in thông tin lỗi
 			e.printStackTrace();

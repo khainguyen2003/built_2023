@@ -239,9 +239,12 @@ public class UserImpl extends BasicImpl implements User {
 	}
 
 	@Override
-	public ResultSet getUser(String userName, String userPass) {
-		String sql = "SELECT * FROM tbluser WHERE (user_name = ?) AND (user_pass = md5(?))";
-
+	public ResultSet getUser(String userName, String userPass) {  
+		String sqlSelect = "SELECT * FROM tbluser WHERE (user_name = ?) AND (user_pass = md5(?))";
+		String sqlUpdate = "UPDATE tbluser SET user_logined = user_logined + 1 WHERE (user_name=?) AND (user_pass = md5(?))";
+		ArrayList<String> sql = new ArrayList<>();
+		sql.add(sqlSelect);
+		sql.add(sqlUpdate);
 		return this.get(sql, userName, userPass);
 	}
 

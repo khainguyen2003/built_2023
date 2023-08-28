@@ -6,11 +6,15 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="id &gt; 0"/>
+		<item key="selection" value=""/>
 		<list key="findhistory">
+			<item value="\\"/>
+			<item value="txtHPhone"/>
+			<item value="txtMPhone"/>
+			<item value="txtPhone"/>
+			<item value="profile"/>
 			<item value="id &gt; 0"/>
 			<item value="fullName"/>
-			<item value="profile"/>
 			<item value="overview"/>
 			<item value="card-body"/>
 			<item value="change-password"/>
@@ -19,15 +23,11 @@
 			<item value="href"/>
 			<item value="card body"/>
 			<item value="id=\&quot;invalid-feedback\&quot;"/>
-			<item value="\\"/>
-			<item value="}"/>
-			<item value="{"/>
-			<item value="dateFomat"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
 			<item value="name"/>
 			<item value="class=\&quot;invalid-feedback\&quot;"/>
-			<item value=""/>
 			<item value="dateFormat"/>
 			<item value="short"/>
 			<item value="/adv/adjs/"/>

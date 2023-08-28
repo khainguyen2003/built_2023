@@ -1,8 +1,9 @@
 package jsoft.object;
 
 public class UserObject {
+	// Sinh tự động
 	private int user_id;
-	private String user_name;
+	private String user_name; // Thuộc tính không thay đổi từ khi tạo
 	private String user_pass;
 	private String user_fullname;
 	private String user_birthday;
@@ -17,12 +18,13 @@ public class UserObject {
 	private short user_applyyear;
 	private byte user_permission;
 	private String user_notes;
-	private String user_roles;
+	private String user_roles; // thuộc tính người dùng chọn
+	// 4 thuộc tính dưới là thuộc tính phần mềm sinh tự động
 	private short user_logined;
 	private String user_created_date;
 	private String user_last_modified;
 	private String user_last_logined;
-	private int user_parent_id;
+	private int user_parent_id; //  thuộc tính sinh tự động theo user_id
 	private byte user_actions;
 
 	
