@@ -104,8 +104,11 @@ public class UserImpl extends BasicImpl implements User {
 			case SETTINGS:
 				sql += "user_permission=?, user_roles=? ";
 				break;
-			case PASSS:
+			case PASS:
 				sql += "user_pass=md5(?) ";
+				break;
+			case TRASH:
+				sql+="user_deleted=1, user_last_modified=? ";
 				break;
 			}
 		
@@ -137,12 +140,15 @@ public class UserImpl extends BasicImpl implements User {
 				pre.setString(2, item.getUser_roles());
 				pre.setInt(3, item.getUser_id());
 				break;
-			case PASSS:
+			case PASS:
 				pre.setString(1, item.getUser_pass());
 				pre.setInt(2, item.getUser_id());
 				break;
+			case TRASH:
+				pre.setString(1, item.getUser_last_modified());
+				pre.setInt(2, item.getUser_id());
+				break;
 			}
-			
 
 			return this.edit(pre);
 		} catch (SQLException e) {
@@ -164,7 +170,7 @@ public class UserImpl extends BasicImpl implements User {
 		if (!this.isEmpty(item)) {
 			return false;
 		}
-		String sql = "DELETE FROM tbluser WHERE user_id=?";
+		String sql = "DELETE FROM tbluser WHERE user_id=? ";
 
 		try {
 			PreparedStatement pre = this.con.prepareStatement(sql);
@@ -233,15 +239,15 @@ public class UserImpl extends BasicImpl implements User {
 
 	@Override
 	public ResultSet getUser(int id) {
-		String sql = "SELECT * FROM tbluser WHERE user_id = ?";
+		String sql = "SELECT * FROM tbluser WHERE (user_id=?) AND (user_deleted=0)";
 
 		return this.get(sql, id);
 	}
 
 	@Override
 	public ResultSet getUser(String userName, String userPass) {  
-		String sqlSelect = "SELECT * FROM tbluser WHERE (user_name = ?) AND (user_pass = md5(?))";
-		String sqlUpdate = "UPDATE tbluser SET user_logined = user_logined + 1 WHERE (user_name=?) AND (user_pass = md5(?))";
+		String sqlSelect = "SELECT * FROM tbluser WHERE (user_name = ?) AND (user_pass = md5(?)) AND (user_deleted=0) ";
+		String sqlUpdate = "UPDATE tbluser SET user_logined = user_logined + 1 WHERE (user_name=?) AND (user_pass = md5(?)) AND (user_deleted=0) ";
 		ArrayList<String> sql = new ArrayList<>();
 		sql.add(sqlSelect);
 		sql.add(sqlUpdate);
@@ -278,7 +284,8 @@ public class UserImpl extends BasicImpl implements User {
 		
 		StringBuilder multiSelect = new StringBuilder();
 		multiSelect.append(sql);
-		multiSelect.append("SELECT COUNT(user_id) AS total FROM tbluser ;");
+		System.out.println(sql);
+		multiSelect.append("SELECT COUNT(user_id) AS total FROM tbluser; ");
 		return this.getReList(multiSelect.toString());
 	}
 	
@@ -295,6 +302,11 @@ public class UserImpl extends BasicImpl implements User {
 				if(id > 0) {
 					conds.append(" AND ((user_parent_id=").append(id).append(") OR (user_id=").append(id).append("))");
 				}
+			}
+			if(similar.isUser_deleted()) {
+				conds.append(" AND (user_deleted=1) ");
+			} else {
+				conds.append(" AND (user_deleted=0) ");
 			}
 		}
 		

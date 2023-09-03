@@ -58,11 +58,11 @@ public class Sidebar extends HttpServlet {
 						break;
 	
 					case "upd":
-	
+						actives.put("list", "class=\"classpath\"");
 						break;
 	
 					case "trash":
-	
+						actives.put("utrash", "class=\"active\"");
 						break;
 	
 					case "log":
@@ -94,17 +94,17 @@ public class Sidebar extends HttpServlet {
 		out.append("</a>");
 		out.append("<ul id=\"user-nav\" class=\"nav-content "+show.getOrDefault("user", "")+ "\" data-bs-parent=\"#sidebar-nav\">");
 		out.append("<li>");
-		out.append("<a href=\"components-alerts.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Alerts</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("<li>");
 		out.append("<a href=\"/adv/user/list\" "+actives.getOrDefault("list","")+">");
 		out.append("<i class=\"bi bi-circle\"></i><span>Danh sách</span>");
 		out.append("</a>");
 		out.append("</li>");
-		out.append("<a href=\"components-tooltips.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Tooltips</span>");
+		out.append("<li>");
+		out.append("<a href=\"components-alerts.html\">");
+		out.append("<i class=\"bi bi-circle\"></i><span>Alerts</span>");
+		out.append("</a>");
+		out.append("</li>");
+		out.append("<a href=\"/adv/user/list?trash\" "+actives.getOrDefault("utrash", "")+">");
+		out.append("<i class=\"bi bi-trash3\"></i><span>Thùng rác</span>");
 		out.append("</a>");
 		out.append("</li>");
 		out.append("</ul>");

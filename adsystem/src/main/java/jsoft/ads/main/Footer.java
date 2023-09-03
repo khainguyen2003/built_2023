@@ -52,12 +52,12 @@ public class Footer extends HttpServlet {
 				"<a href=\"#\" class=\"back-to-top d-flex align-items-center justify-content-center\"><i class=\"bi bi-arrow-up-short\"></i></a>");
 
 		out.append("<!-- Vendor JS Files -->");
-		out.append("<script src=\"/adv/adjs/apexcharts/apexcharts.min.js\"></script>");
+		out.append("<script src=\"/adv/adjs/apexcharts/apexcharts.min.js\" charset=\"utf-8\"></script>");
 //		out.append("<script src=\"/adv/adjs/chart.js/chart.umd.js\"></script>");
 //		out.append("<script src=\"/adv/adjs/echarts/echarts.min.js\"></script>");
 
 		out.append("<!-- Template Main JS File -->");
-		out.append("<script src=\"/adv/adjs/main.js\"></script>");
+		out.append("<script src=\"/adv/adjs/main.js\" type=\"module\"></script>");
 
 		out.append("</body>");
 

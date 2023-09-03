@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.lang.Exception"/>
-    <fullyQualifiedTypeName name="jsoft.ConnectionPoolImpl"/>
-    <fullyQualifiedTypeName name="jsoft.ads.user.UserImpl"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
     <fullyQualifiedTypeName name="jsoft.object.ProductObject"/>
     <fullyQualifiedTypeName name="java.sql.ResultSetMetaData"/>
@@ -17,7 +14,6 @@
     <fullyQualifiedTypeName name="com.mysql.jdbc.PreparedStatement"/>
     <fullyQualifiedTypeName name="jsoft.ads.basic.Basic"/>
     <fullyQualifiedTypeName name="jsoft.ads.section.SectionControl"/>
-    <fullyQualifiedTypeName name="java.lang.StringBuffer"/>
     <fullyQualifiedTypeName name="jsoft.ads.catagory.CategoryControl"/>
     <fullyQualifiedTypeName name="jsoft.ads.catagory.CategoryModel"/>
     <fullyQualifiedTypeName name="jsoft.ads.catagory.CATEGORY_SORT_TYPE"/>
@@ -31,9 +27,7 @@
     <fullyQualifiedTypeName name="com.mysql.fabric.xmlrpc.base.Array"/>
     <fullyQualifiedTypeName name="org.javatuples.Quartet"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
-    <fullyQualifiedTypeName name="javax.servlet.ServletRequest"/>
     <fullyQualifiedTypeName name="java.lang.Integer"/>
-    <fullyQualifiedTypeName name="jsoft.library.Utilities_text"/>
     <fullyQualifiedTypeName name="java.text.DateFormat"/>
     <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
     <fullyQualifiedTypeName name="java.io.PrintWriter"/>
@@ -45,19 +39,25 @@
     <fullyQualifiedTypeName name="javax.print.event.PrintJobEvent"/>
     <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="javax.swing.tree.DefaultTreeCellEditor.EditorContainer"/>
-    <fullyQualifiedTypeName name="jsoft.ads.user.USER_EDIT_TYPE"/>
-    <fullyQualifiedTypeName name="jsoft.library.Utilities_date"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="java.sql.ResultSet"/>
     <fullyQualifiedTypeName name="java.lang.Appendable"/>
     <fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="jsoft.ads.user.UserLibrary"/>
-    <fullyQualifiedTypeName name="java.lang.StringBuilder"/>
-    <fullyQualifiedTypeName name="jsoft.library.Utilities"/>
     <fullyQualifiedTypeName name="java.lang.EnumConstantNotPresentException"/>
     <fullyQualifiedTypeName name="jsoft.ConnectionPool"/>
     <fullyQualifiedTypeName name="java.lang.NoSuchFieldError"/>
     <fullyQualifiedTypeName name="jsoft.ads.user.UserControl"/>
+    <fullyQualifiedTypeName name="jsoft.library.Utilities_text"/>
+    <fullyQualifiedTypeName name="javax.servlet.http.HttpServletRequest"/>
+    <fullyQualifiedTypeName name="javax.servlet.ServletRequest"/>
+    <fullyQualifiedTypeName name="jsoft.library.Utilities_date"/>
+    <fullyQualifiedTypeName name="jsoft.ads.user.USER_EDIT_TYPE"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.lang.StringBuffer"/>
+    <fullyQualifiedTypeName name="java.lang.StringBuilder"/>
     <fullyQualifiedTypeName name="jsoft.object.UserObject"/>
+    <fullyQualifiedTypeName name="java.lang.ClassCircularityError"/>
+    <fullyQualifiedTypeName name="jsoft.ads.user.UserLibrary"/>
+    <fullyQualifiedTypeName name="jsoft.library.Utilities"/>
+    <fullyQualifiedTypeName name="org.apache.tomcat.util.http.fileupload.FileUtils"/>
 </qualifiedTypeNameHistroy>

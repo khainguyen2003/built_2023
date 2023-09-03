@@ -26,6 +26,7 @@ public class UserObject {
 	private String user_last_logined;
 	private int user_parent_id; //  thuộc tính sinh tự động theo user_id
 	private byte user_actions;
+	private boolean user_deleted;
 
 	
 	
@@ -33,7 +34,7 @@ public class UserObject {
 			String user_mobilephone, String user_homephone, String user_officephone, String user_email,
 			String user_address, String user_jobarea, String user_job, String user_position, short user_applyyear,
 			byte user_permission, String user_notes, String user_roles, short user_logined, String user_created_date,
-			String user_last_modified, String user_last_logined, int user_parent_id, byte user_actions) {
+			String user_last_modified, String user_last_logined, int user_parent_id, byte user_actions, boolean user_deleted) {
 		super();
 		this.user_id = user_id;
 		this.user_name = user_name;
@@ -58,11 +59,13 @@ public class UserObject {
 		this.user_last_logined = user_last_logined;
 		this.user_parent_id = user_parent_id;
 		this.user_actions = user_actions;
+		this.user_deleted = user_deleted;
 	}
 
 	public UserObject() {
 		// TODO Auto-generated constructor stub
 	}
+
 
 	// getter
 	public int getUser_id() {
@@ -248,6 +251,13 @@ public class UserObject {
 
 	public void setUser_actions(byte user_actions) {
 		this.user_actions = user_actions;
+	}
+	public boolean isUser_deleted() {
+		return user_deleted;
+	}
+
+	public void setUser_deleted(boolean user_deleted) {
+		this.user_deleted = user_deleted;
 	}
 	public String toString() {
 		return "ID:"+this.user_id+"\tNAME:"+this.user_name+"\tFULLNAME:"+this.user_fullname;

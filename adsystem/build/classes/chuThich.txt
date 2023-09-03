@@ -36,3 +36,19 @@ Với tên fullname là Hoàng Quang huy thì alias là huyqh
 
 * Liên kết ảo: tạo ra một bảng ảo không có giá trị trình bày dữ liệu, lưu trữ dữ liệu. Khi thêm user mới  thì sẽ lưu user_id vào bảng đó. khi thêm sửa, xóa thì phải
 xóa liên kết ảo
+
+- Xoá tương đối thực chất là edit user
+
+// -------------- Câu lệnh sql
+// Câu lệnh định nghĩa lại cột
+ALTER TABLE `jp210302_data`.`tbluser` MODIFY COLUMN `user_deleted` TINYINT(1) DEFAULT 0 COMMENT 'Nếu delete=1 thì tài khoan duoc xóa (Xoá tuong doi / luu vao thung rac)';
+
+// --------------
+
+/adv/user/list => header?pos=urlist
+/adv/user/list?trash => header?pos=urtrash
+
+- Sidebar sẽ tách ra  2 phần:
+menu = ur
+act = {list, trash}
+actives.put(list), actives.put(utrash) 

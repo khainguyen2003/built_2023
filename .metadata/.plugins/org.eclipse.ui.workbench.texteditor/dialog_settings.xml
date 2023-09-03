@@ -8,6 +8,9 @@
 		<item key="isRegEx" value="false"/>
 		<item key="selection" value=""/>
 		<list key="findhistory">
+			<item value="&amp;id"/>
+			<item value="&#x09;&#x09;tmp.append(&quot;&quot;);"/>
+			<item value="jsoft.library.Utilities.encode("/>
 			<item value="\\"/>
 			<item value="txtHPhone"/>
 			<item value="txtMPhone"/>
@@ -20,9 +23,6 @@
 			<item value="change-password"/>
 			<item value="settings"/>
 			<item value="edit"/>
-			<item value="href"/>
-			<item value="card body"/>
-			<item value="id=\&quot;invalid-feedback\&quot;"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>

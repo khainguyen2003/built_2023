@@ -1,8 +1,7 @@
 package jsoft.library;
 
-import java.util.*;
 import net.htmlparser.jericho.*;
-import javax.servlet.*;
+import javax.servlet.*; 
 
 public class Utilities {
 	

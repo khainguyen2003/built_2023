@@ -1,5 +1,5 @@
 package jsoft.ads.user;
 
 public enum USER_EDIT_TYPE {
-	GENERAL, SETTINGS, PASSS
+	GENERAL, SETTINGS, PASS, TRASH
 }

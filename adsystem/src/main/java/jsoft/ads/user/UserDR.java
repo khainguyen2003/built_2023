@@ -44,12 +44,23 @@ public class UserDR extends HttpServlet {
 					UserObject dUser = new UserObject();
 					dUser.setUser_id(id);
 					dUser.setUser_parent_id(pid);
-					boolean result = uc.delUser(dUser);
+					dUser.setUser_last_modified(Utilities_date.getDate());
+					
+					// Tìm tham số
+					String trash = request.getParameter("t");
+					String url = "/adv/user/list";
+					boolean result;
+					if(trash == null) {
+						result = uc.delUser(dUser);
+						url += "?trash";
+					} else {
+						result = uc.editUser(dUser, USER_EDIT_TYPE.TRASH);
+					}
 					uc.releaseConnection();
 					if(result) {
-						response.sendRedirect("/adv/user/list");
+						response.sendRedirect(url);
 					} else {
-						response.sendRedirect("/adv/user/list?err=notok");
+						response.sendRedirect(url + "&err=notok");
 					}
 				} else {
 					response.sendRedirect("/adv/user/list?err=nopermis");
