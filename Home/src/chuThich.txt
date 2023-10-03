@@ -1,0 +1,15 @@
+--------- Ngày 25/09
+- Cách chỉnh sửa template khi tạo file jsp mới
+window -> preferences -> web -> jsp -> 
+- Đường dẫn file biên dịch jsp -> servlet
+D:\JP302_Khai\built_2023\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\work\Catalina\localhost\home\org\apache\jsp
+- các trình bày liên quan đên giao diện sẽ để trong lib
+- Các file servlet được biên dịch từ file jsp là các file tạm thời, sau một thời gian không sử dụng thì file này sẽ bị xóa đi.
+Khi có lượt truy cập lại thì sẽ biên dịch lại -> hạn chế file jsp, cấu ình thêm file servlet để cải thiện tốc độ
+
+-- Cách chọn font chữ đẹp
+dấu huyền bằng với chiều cao chữ T in đậm
+- nét chữ mảnh
+- Chữ o không quá tròn
+- font chữ ko chân
+- chữ đ đầu không quá nhỏ

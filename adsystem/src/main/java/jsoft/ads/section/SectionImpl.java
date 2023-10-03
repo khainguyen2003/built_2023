@@ -3,8 +3,12 @@ package jsoft.ads.section;
 import jsoft.*;
 import jsoft.ads.basic.BasicImpl;
 import jsoft.object.SectionObject;
+import jsoft.object.UserObject;
 
 import java.util.*;
+
+import org.javatuples.Quartet;
+
 import java.sql.*;
 
 public class SectionImpl extends BasicImpl implements Section {
@@ -138,12 +142,26 @@ public class SectionImpl extends BasicImpl implements Section {
 	}
 
 	@Override
-	public ArrayList<ResultSet> getSections(SectionObject similar, int at, byte total) {
+	public ArrayList<ResultSet> getSections(Quartet<SectionObject, Short, Byte, UserObject> infors) {
+		SectionObject similar = infors.getValue0();
+		byte total = infors.getValue2();
+		int at = (infors.getValue1() - 1) * total;
+		UserObject user = infors.getValue3();
+		
 		StringBuilder sql = new StringBuilder();
+		// Danh sách chuyên mục
 		sql.append("SELECT * FROM tblsection ");
+		sql.append("LEFT JOIN tbluser ON section_manager_id=user_id ");
 		sql.append("ORDER BY section_id ASC ");
 		sql.append("LIMIT " + at + ", " + total + "; ");
-		sql.append("SELECT COUNT(section_id) AS total FROM tblsection");
+		// tổng số chuyên mục
+		sql.append("SELECT COUNT(section_id) AS total FROM tblsection; ");
+		// Danh sách Người sử dụng sẽ được cấp quyền quản lý, phụ thuộc theo tài khoản đăng nhập
+		sql.append("SELECT * FROM tbluser WHERE ");
+		sql.append("(user_permission<=").append(user.getUser_permission()).append(") AND (");
+		// user đăng nhập là cha của người dùng lấy ra từ database hoặc là chính người dùng đó
+		sql.append("(user_parent_id=").append(user.getUser_id()).append(") OR (user_id=").append(user.getUser_id()).append(")");
+		sql.append("); ");
 		return this.getReList(sql.toString());
 	}
 	

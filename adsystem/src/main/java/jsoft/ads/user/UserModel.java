@@ -4,55 +4,58 @@ import jsoft.*;
 import jsoft.object.*;
 
 import java.util.*;
+
+import org.javatuples.Pair;
+
 import java.sql.*;
 
 public class UserModel {
 	private User u;
-	
+
 	public UserModel(ConnectionPool cp) {
-		this.u= new UserImpl(cp);
+		this.u = new UserImpl(cp);
 	}
-	
-	protected void finalize()throws Throwable{
-		this.u=null;
+
+	protected void finalize() throws Throwable {
+		this.u = null;
 	}
-	
+
 	// Phương thức chia sẻ bộ quản lý kết nối
-	// Ta chỉ nhìn được các phương thức của interface user. Muốn dùng các phương thức của Basic thì phải extend interface Basic
+	// Ta chỉ nhìn được các phương thức của interface user. Muốn dùng các phương
+	// thức của Basic thì phải extend interface Basic
 	public ConnectionPool getCP() {
 		return this.u.getCP();
 	}
-	
+
 	public void releaseConnection() {
 		this.u.releaseConnection();
 	}
 
-	//***********************Chuyen huong dieu khien tu User Impl*****************************************
+	// ***********************Chuyen huong dieu khien tu User
+	// Impl*****************************************
 	public boolean addUser(UserObject item) {
 		return this.u.addUser(item);
 	}
-	
+
 	public boolean editUser(UserObject item, USER_EDIT_TYPE et) {
 		return this.u.editUser(item, et);
 	}
-	
+
 	public boolean delUser(UserObject item) {
 		return this.u.delUser(item);
 	}
-	
-	
-	//****************************************************************
-	
+
+	// ****************************************************************
+
 	public UserObject getUserObject(int id) {
-		//Gan gia tri khoi tao cho doi tuong UserObject
-		UserObject item = null ;
-		
-		//Lay ban ghi 
+		// Gan gia tri khoi tao cho doi tuong UserObject
+		UserObject item = null;
+
+		// Lay ban ghi
 		ResultSet rs = this.u.getUser(id);
-		
-		
-		//Chuyen doi ban ghi thanh doi tuong
-		if (rs!=null) {
+
+		// Chuyen doi ban ghi thanh doi tuong
+		if (rs != null) {
 			try {
 				if (rs.next()) {
 					item = new UserObject();
@@ -72,7 +75,8 @@ public class UserModel {
 					item.setUser_jobarea(rs.getString("user_jobarea"));
 					item.setUser_parent_id(rs.getInt("user_parent_id"));
 					item.setUser_deleted(rs.getBoolean("user_deleted"));
-					
+					item.setUser_images(rs.getString("user_image"));
+
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -81,18 +85,17 @@ public class UserModel {
 		}
 		return item;
 	}
-	
+
 	// Xử lý đăng nhập
 	public UserObject getUserObject(String username, String userpass) {
-		//Gan gia tri khoi tao cho doi tuong UserObject
-		UserObject item = null ;
-		
-		//Lay ban ghi 
+		// Gan gia tri khoi tao cho doi tuong UserObject
+		UserObject item = null;
+
+		// Lay ban ghi
 		ResultSet rs = this.u.getUser(username, userpass);
-		
-		
-		//Chuyen doi ban ghi thanh doi tuong
-		if (rs!=null) {
+
+		// Chuyen doi ban ghi thanh doi tuong
+		if (rs != null) {
 			try {
 				if (rs.next()) {
 					item = new UserObject();
@@ -109,6 +112,7 @@ public class UserModel {
 					item.setUser_deleted(rs.getBoolean("user_deleted"));
 					item.setUser_parent_id(rs.getInt("user_parent_id"));
 					item.setUser_logined(rs.getShort("user_logined"));
+					item.setUser_images(rs.getString("user_image"));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -118,19 +122,20 @@ public class UserModel {
 		return item;
 	}
 
-	public ArrayList<UserObject> getUserObjects(UserObject similar, short page, byte total, USER_SORT_TYPE type) {
-		
-		//Gan gia tri khoi tao cho doi tuong UserObject
+	public Pair<ArrayList<UserObject>, Integer> getUserObjects(UserObject similar, short page, byte total,
+			USER_SORT_TYPE type) {
+
+		// Gan gia tri khoi tao cho doi tuong UserObject
 		ArrayList<UserObject> items = new ArrayList<>();
-		UserObject item = null ;
-		
-		//Lay ban ghi 
-		int at = (page-1)*total;
+		UserObject item = null;
+
+		// Lay ban ghi
+		int at = (page - 1) * total;
 		ArrayList<ResultSet> res = this.u.getUsers(similar, at, total, type);
 		ResultSet rs = res.get(0);
-		
-		//Chuyen doi ban ghi thanh doi tuong
-		if (rs!=null) {
+
+		// Chuyen doi ban ghi thanh doi tuong
+		if (rs != null) {
 			try {
 				while (rs.next()) {
 					item = new UserObject();
@@ -148,8 +153,7 @@ public class UserModel {
 					item.setUser_deleted(rs.getBoolean("user_deleted"));
 					item.setUser_logined(rs.getShort("user_logined"));
 					item.setUser_parent_id(rs.getInt("user_parent_id"));
-					
-					
+
 					// Dua doi tuong vao tap hop
 					items.add(item);
 				}
@@ -158,18 +162,30 @@ public class UserModel {
 				e.printStackTrace();
 			}
 		}
-		return items;
+		// Lây tổng số bản ghi
+		int totalGlobal = 0;
+		rs = res.get(1);
+		if (rs != null) {
+			try {
+				if (rs.next()) {
+					totalGlobal = rs.getInt("total");
+				}
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Pair<>(items, totalGlobal);
 	}
-	
-	public static void main(String[] args) {
-		ConnectionPool cp = new ConnectionPoolImpl();
-		
-		UserModel um = new UserModel(cp);
-		
-		ArrayList<UserObject> items = um.getUserObjects(null, (short) 1, (byte) 20, USER_SORT_TYPE.FULLNAME);
-		
-		items.forEach(item -> System.out.println(item));
-	};
-	
-}
 
+//	public static void main(String[] args) {
+//		ConnectionPool cp = new ConnectionPoolImpl();
+//		
+//		UserModel um = new UserModel(cp);
+//		
+//		ArrayList<UserObject> items = um.getUserObjects(null, (short) 1, (byte) 20, USER_SORT_TYPE.FULLNAME);
+//		
+//		items.forEach(item -> System.out.println(item));
+//	};
+
+}

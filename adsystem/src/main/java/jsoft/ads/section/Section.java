@@ -2,7 +2,12 @@ package jsoft.ads.section;
 
 import jsoft.ShareControl;
 import jsoft.object.SectionObject;
+import jsoft.object.UserObject;
+
 import java.util.*;
+
+import org.javatuples.Quartet;
+
 import java.sql.*;
 
 public interface Section extends ShareControl {
@@ -14,5 +19,5 @@ public interface Section extends ShareControl {
 	public ResultSet getSection(int id);
 	
 	//Lấy bản nhiều ghi
-	public ArrayList<ResultSet> getSections(SectionObject similar, int at, byte total);
+	public ArrayList<ResultSet> getSections(Quartet<SectionObject, Short, Byte, UserObject> infors);
 }

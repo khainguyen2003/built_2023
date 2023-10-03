@@ -112,33 +112,32 @@ public class Sidebar extends HttpServlet {
 
 		out.append("<li class=\"nav-item\">");
 		out.append(
-				"<a class=\"nav-link collapsed\" data-bs-target=\"#forms-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
-		out.append(
-				"<i class=\"bi bi-journal-text\"></i><span>Forms</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
+				"<a class=\"nav-link collapsed\" data-bs-target=\"#article-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
+		out.append("<i class=\"bi bi-bar-chart\"></i><span>Bài viết & tin tức</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
 		out.append("</a>");
-		out.append("<ul id=\"forms-nav\" class=\"nav-content collapse \" data-bs-parent=\"#sidebar-nav\">");
+		out.append("<ul id=\"article-nav\" class=\"nav-content collapse \" data-bs-parent=\"#sidebar-nav\">");
 		out.append("<li>");
-		out.append("<a href=\"forms-elements.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Form Elements</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("<li>");
-		out.append("<a href=\"forms-layouts.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Form Layouts</span>");
+		out.append("<a href=\"/adv/ar/list\">");
+		out.append("<i class=\"bi bi-circle\"></i><span>Danh sách</span>");
 		out.append("</a>");
 		out.append("</li>");
 		out.append("<li>");
-		out.append("<a href=\"forms-editors.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Form Editors</span>");
+		out.append("<a href=\"/adv/ar/upd\">");
+		out.append("<i class=\"bi bi-circle\"></i><span>Thêm mới</span>");
 		out.append("</a>");
 		out.append("</li>");
 		out.append("<li>");
-		out.append("<a href=\"forms-validation.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Form Validation</span>");
+		out.append("<a href=\"/adv/section/list\">");
+		out.append("<i class=\"bi bi-circle\"></i><span>Chuyên mục</span>");
+		out.append("</a>");
+		out.append("</li>");
+		out.append("<li>");
+		out.append("<a href=\"/adv/category/list\">");
+		out.append("<i class=\"bi bi-circle\"></i><span>Thể loại</span>");
 		out.append("</a>");
 		out.append("</li>");
 		out.append("</ul>");
-		out.append("</li><!-- End Forms Nav -->");
+		out.append("</li><!-- End article Nav -->");
 
 		out.append("<li class=\"nav-item\">");
 		out.append(
@@ -159,30 +158,6 @@ public class Sidebar extends HttpServlet {
 		out.append("</li>");
 		out.append("</ul>");
 		out.append("</li><!-- End Tables Nav -->");
-
-		out.append("<li class=\"nav-item\">");
-		out.append(
-				"<a class=\"nav-link collapsed\" data-bs-target=\"#charts-nav\" data-bs-toggle=\"collapse\" href=\"#\">");
-		out.append("<i class=\"bi bi-bar-chart\"></i><span>Charts</span><i class=\"bi bi-chevron-down ms-auto\"></i>");
-		out.append("</a>");
-		out.append("<ul id=\"charts-nav\" class=\"nav-content collapse \" data-bs-parent=\"#sidebar-nav\">");
-		out.append("<li>");
-		out.append("<a href=\"charts-chartjs.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>Chart.js</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("<li>");
-		out.append("<a href=\"charts-apexcharts.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>ApexCharts</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("<li>");
-		out.append("<a href=\"charts-echarts.html\">");
-		out.append("<i class=\"bi bi-circle\"></i><span>ECharts</span>");
-		out.append("</a>");
-		out.append("</li>");
-		out.append("</ul>");
-		out.append("</li><!-- End Charts Nav -->");
 
 		out.append("<li class=\"nav-item\">");
 		out.append(

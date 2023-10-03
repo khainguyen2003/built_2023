@@ -8,43 +8,43 @@
 		<item key="isRegEx" value="false"/>
 		<item key="selection" value=""/>
 		<list key="findhistory">
-			<item value="&amp;id"/>
-			<item value="&#x09;&#x09;tmp.append(&quot;&quot;);"/>
-			<item value="jsoft.library.Utilities.encode("/>
+			<item value=".indexof"/>
 			<item value="\\"/>
-			<item value="txtHPhone"/>
-			<item value="txtMPhone"/>
-			<item value="txtPhone"/>
-			<item value="profile"/>
-			<item value="id &gt; 0"/>
-			<item value="fullName"/>
-			<item value="overview"/>
-			<item value="card-body"/>
-			<item value="change-password"/>
-			<item value="settings"/>
-			<item value="edit"/>
+			<item value="avatar"/>
+			<item value="home/img/"/>
+			<item value="assets/img"/>
+			<item value="Hero Slider"/>
+			<item value="assets/js/"/>
+			<item value="assets/vendor/"/>
+			<item value="assets/css/"/>
+			<item value="assets/img/"/>
+			<item value="//"/>
+			<item value="out"/>
+			<item value="input-password"/>
+			<item value="class=\&quot;input-password\&quot;"/>
+			<item value="id=\&quot;show-btn\&quot;"/>
 		</list>
 		<list key="replacehistory">
+			<item value="/"/>
+			<item value="/home/img/"/>
+			<item value="home/img"/>
+			<item value="/home/js/"/>
+			<item value="/home/vendor/"/>
+			<item value="/home/css/"/>
+			<item value="/home/img"/>
 			<item value=""/>
+			<item value="tmp"/>
+			<item value="class=\&quot;show-btn\&quot;"/>
+			<item value="page="/>
 			<item value="name"/>
 			<item value="class=\&quot;invalid-feedback\&quot;"/>
 			<item value="dateFormat"/>
 			<item value="short"/>
-			<item value="/adv/adjs/"/>
-			<item value="/adv/adcss/"/>
-			<item value="/adv/adcss"/>
-			<item value=" &quot;)"/>
-			<item value="Article"/>
-			<item value="am"/>
-			<item value="ArticleModel"/>
-			<item value="a"/>
-			<item value="Category"/>
-			<item value="category"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="868"/>
-		<item key="DIALOG_Y_ORIGIN" value="200"/>
+		<item key="DIALOG_X_ORIGIN" value="1246"/>
+		<item key="DIALOG_Y_ORIGIN" value="198"/>
 		<item key="DIALOG_WIDTH" value="414"/>
 		<item key="DIALOG_HEIGHT" value="454"/>
 		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
@@ -52,5 +52,12 @@
 	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
 		<item key="DIALOG_X_ORIGIN" value="646"/>
 		<item key="DIALOG_Y_ORIGIN" value="349"/>
+	</section>
+	<section name="org.eclipse.jst.jsp.ui.internal.preferences.ui.JSPTemplatePreferencePage$JSPEditTemplateDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="569"/>
+		<item key="DIALOG_Y_ORIGIN" value="240"/>
+		<item key="DIALOG_WIDTH" value="801"/>
+		<item key="DIALOG_HEIGHT" value="419"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 	</section>
 </section>

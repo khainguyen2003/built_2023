@@ -32,15 +32,15 @@ public class SectionControl {
 		return this.sm.delSection(item);
 	}
 	
-	public ArrayList<String> viewSection(Triplet<SectionObject, Short, Byte> infors) {
-		Pair<ArrayList<SectionObject>, Integer> datas = this.sm.getSections(infors.getValue0(), infors.getValue1(), infors.getValue2());
+	public ArrayList<String> viewSection(Quartet<SectionObject, Short, Byte, UserObject> infors) {
+		Quartet<ArrayList<SectionObject>, Integer, HashMap<Integer, String>, ArrayList<UserObject>> datas = this.sm.getSections(infors);
 		
 		return SectionLibrary.viewSection(datas);
 	}
 	
 	public static void main(String[] args) {
 		SectionControl sc = new SectionControl(null);
-		Triplet<SectionObject, Short, Byte> infors = new Triplet<SectionObject, Short, Byte>(null, (short)1, (byte)10);
+		Quartet<SectionObject, Short, Byte, UserObject> infors = new Quartet<>(null, (short)1, (byte)10, null);
 		
 		ArrayList<String> view = sc.viewSection(infors);
 		sc.releaseConnection();

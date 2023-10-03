@@ -3,9 +3,18 @@ import jsoft.library.Utilities;
 import jsoft.object.*;
 import java.util.*;
 
+import org.javatuples.Pair;
+import org.javatuples.Quartet;
+
 public class UserLibrary {
 	// Tham số thứ 2 chứa thông tin người dùng đang đăng nhập
-	public static ArrayList<String> viewUser(ArrayList<UserObject> items, UserObject user) {
+	public static ArrayList<String> viewUser(Pair<ArrayList<UserObject>, Integer> datas, Quartet<UserObject, Short, Byte, USER_SORT_TYPE> infors) {
+		ArrayList<UserObject> items = datas.getValue0();
+		int totalGlobal = datas.getValue1();
+		UserObject user = infors.getValue0();
+		short page = infors.getValue1();
+		byte total = infors.getValue2();
+		
 		StringBuilder tmp = new StringBuilder();
 		tmp.append("<table class=\"table table-striped\">");
 		tmp.append("<thead>");
@@ -46,7 +55,7 @@ public class UserLibrary {
 					tmp.append("<td><a href=\"#\" class=\"btn btn-danger btn-sm disabled\" disabled><i class=\"bi bi-trash\"></i></a></td>");
 				} else {
 					// Kiểm tra người dùng có phải người quản trị hay không. Nếu có thì người dùng có toàn quyền sửa danh sách người dùng
-					if(user.getUser_permission() >=4) {
+					if(user.getUser_permission() >= 4) {
 						tmp.append("<td><a href=\"/adv/user/profile?id="+item.getUser_id()+"\" class=\"btn btn-primary btn-sm\"><i class=\"bi bi-pencil-square\"></i></a></td>");
 						tmp.append("<td><button class=\"btn btn-danger btn-sm\" data-bs-toggle=\"modal\" data-bs-target=\"#delUser"+item.getUser_id()+"\"><i class=\"bi bi-trash\"></i></button></td>");
 						tmp.append(UserLibrary.viewDelUser(item));
@@ -73,6 +82,14 @@ public class UserLibrary {
 		// Cấu trúc biểu đồ
 		String chart = UserLibrary.createChart(items).toString();
 		view.add(chart);
+		
+		// Cấu trúc phân trang
+		String url = "/adv/user/list";
+		if(user.getUser_name() != null && !user.getUser_name().equalsIgnoreCase("")) {
+			url += "?key=" + user.getUser_name();
+		}
+		String paging = UserLibrary.getPaging(url, page, totalGlobal, total);					
+		view.add(paging);
 		return view;
 	}
 	
@@ -119,19 +136,38 @@ public class UserLibrary {
 	public static StringBuilder createChart(ArrayList<UserObject> items) {
 		StringBuilder data = new StringBuilder();
 		StringBuilder accounts = new StringBuilder();
-		items.forEach(item -> {
+		// đoạn 1
+//		long startTime = System.nanoTime();
+		Iterator<UserObject> iterator = items.iterator();
+		while(iterator.hasNext()) {
+			UserObject item = iterator.next();
 			data.append(item.getUser_logined());
 			accounts.append("'"+Utilities.decode(item.getUser_fullname())).append(" (").append(item.getUser_name()).append(")'");
-			if(items.indexOf(item) < items.size()) {
+			if(iterator.hasNext()) {
 				data.append(", ");
 				accounts.append(", ");
 			}
-		});
-//		System.out.println(data.toString());
+		}
+		
+//		long endTime = System.nanoTime(); // hoặc System.currentTimeMillis();
+//		long elapsedTime = endTime - startTime;
+		// đoạn 2
+//		long startTime2 = System.nanoTime();
+//		items.forEach(item -> {
+//			data.append(item.getUser_logined());
+//			accounts.append("'"+Utilities.decode(item.getUser_fullname())).append(" (").append(item.getUser_name()).append(")'");
+//			if(items.indexOf(item) < items.size()) {
+//				data.append(", ");
+//				accounts.append(", ");
+//			}
+//		});
+//		long endTime2 = System.nanoTime(); // hoặc System.currentTimeMillis();
+//		long elapsedTime2 = endTime2 - startTime2;
+		System.out.println(data.toString());
 		StringBuilder tmp = new StringBuilder();
 		tmp.append("<div class=\"card\">");
 		tmp.append("<div class=\"card-body\">");
-		tmp.append("<h5 class=\"card-title\">Bar Chart</h5>");
+		tmp.append("<h5 class=\"card-title\">Biểu đồ đăng nhập hệ thống</h5>");
 
 		tmp.append("<!-- Bar Chart -->");
 		tmp.append("<div id=\"barChart\"></div>");
@@ -146,7 +182,6 @@ public class UserLibrary {
 		
 		tmp.append("chart: {");
 		tmp.append("type: 'bar',");
-		tmp.append("height: 350");
 		tmp.append("},");
 		tmp.append("plotOptions: {");
 		tmp.append("bar: {");
@@ -159,7 +194,33 @@ public class UserLibrary {
 		tmp.append("},");
 		tmp.append("xaxis: {");
 		tmp.append("categories: ["+accounts.toString()+"],");
+		tmp.append("labels: {");
+		tmp.append("show: true,");
+		tmp.append("style: {");
+		tmp.append("color: [],");
+		tmp.append("fontSize: '15px',");
+		tmp.append("fontFamily: 'Helvetica, Arial, sans-serif',");
+		tmp.append("fontWeight: 600,");
+		tmp.append("cssClass: 'apexcharts-xaxis-label',");
+		tmp.append("},");
+		tmp.append("},");
+		tmp.append("},");
+		tmp.append("yaxis: {");
+		tmp.append("show: true,");
+		tmp.append("labels: {");
+		tmp.append("show: true,");
+		tmp.append("align: 'right',");
+		tmp.append("minWidth: 0,");
+		tmp.append("style: {");
+		tmp.append("color: [],");
+		tmp.append("fontSize: '15px',");
+		tmp.append("fontFamily: 'Helvetica, Arial, sans-serif',");
+		tmp.append("fontWeight: 400,");
+		tmp.append("cssClass: 'apexcharts-yaxis-label',");
+		tmp.append("},");
+		tmp.append("},");
 		tmp.append("}");
+		
 		tmp.append("}).render();");
 		tmp.append("});");
 		tmp.append("</script>");
@@ -169,6 +230,67 @@ public class UserLibrary {
 		tmp.append("</div>");
 		
 		return tmp;
+	}
+	
+	public static String getPaging(String url, short page, int total, byte totalPerPage) {
+		// Nếu url chưa có tham số thì thêm ?, nếu có thì thêm &
+		if(url.indexOf("?") != -1) {
+			url += "&";
+		} else {
+			url += "?";
+		}
+		// Tính toán tổng số trang
+		int countPages = total / totalPerPage;
+		if(total % totalPerPage != 0)
+			countPages++;
+		if(page > countPages || page <= 0) {
+			page = 1;
+		}
+		StringBuilder tmp = new StringBuilder();
+
+		tmp.append("<nav aria-label=\"...\">");
+		tmp.append("<ul class=\"pagination justify-content-center\">");
+		tmp.append("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"page="+((page > 1) ? (page - 1) : page)+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&laquo;</span></a></li>");
+
+		// left current
+		String leftCurrent = "";
+		int count = 0;
+		for(int i = page - 1; i > 0; i--) {
+			leftCurrent = "<li class=\"page-item "+i+"\"><a class=\"page-link\" href=\""+url+"page="+i+"\">"+i+"</a></li>" + leftCurrent;
+			if(++count >= 2) {
+				break;
+			}
+		}
+		if(page > 4) {
+			leftCurrent = "<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">1</span></a></li>" + "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">...</a></li>" + leftCurrent;
+		}
+		tmp.append(leftCurrent);
+		tmp.append("<li class=\"page-item active\" aria-current=\"page\"><a class=\"page-link\" href=\""+url+"page="+page+"\">"+page+"</a></li>");
+		
+		// right current
+		String rightCurrent = "";
+		count = 0;
+		for(int i = page + 1; i < countPages; i++) {
+			System.out.println(i);
+			rightCurrent += "<li class=\"page-item "+i+"\"><a class=\"page-link\" href=\""+url+"page="+i+"\">"+i+"</a></li>";
+			if(++count >= 2) {
+				break;
+			}
+		}
+		if(countPages > page + 2) {
+			rightCurrent += "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">...</a></li>";
+		}
+		tmp.append(rightCurrent);
+		if(page != countPages) {
+			tmp.append("<li class=\"page-item end\"><a class=\"page-link\" href=\""+url+"page="+countPages+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">"+countPages+"</span></a></li>");
+		}
+		
+		tmp.append("<li class=\"page-item\"><a class=\"page-link next\" href=\""+url+"page="+((page < countPages) ? (page + 1) : page)+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">&raquo;</span></a></li>");
+		
+		tmp.append("</ul>");
+		tmp.append("</nav>");
+		
+		return tmp.toString();
 	}
 
 }

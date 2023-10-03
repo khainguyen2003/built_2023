@@ -47,9 +47,9 @@ public class UserControl {
 		byte total = infors.getValue2();
 		USER_SORT_TYPE ust = infors.getValue3();
 		
-		ArrayList<UserObject> datas = this.um.getUserObjects(similar, page, total, ust);
+		Pair<ArrayList<UserObject>, Integer> datas = this.um.getUserObjects(similar, page, total, ust);
 		
-		return UserLibrary.viewUser(datas, similar);
+		return UserLibrary.viewUser(datas, infors);
 	}
 	
 	public static void main(String[] args) {

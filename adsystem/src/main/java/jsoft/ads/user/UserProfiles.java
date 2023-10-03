@@ -1,13 +1,17 @@
 package jsoft.ads.user;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import jsoft.library.*;
 
 import org.javatuples.Quartet;
 
@@ -19,6 +23,9 @@ import jsoft.*;
  * Servlet implementation class View
  */
 @WebServlet("/user/profile")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+    maxFileSize = 1024 * 1024 * 50, // 50MB
+    maxRequestSize = 1024 * 1024 * 50)
 public class UserProfiles extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -110,9 +117,29 @@ public class UserProfiles extends HttpServlet {
 
 		out.append("<div class=\"card\">");
 		out.append("<div class=\"card-body profile-card pt-4 d-flex flex-column align-items-center\">");
-
+		String avatar = "";
 		if (euser != null) {
-			out.append("<img src=\"assets/img/profile-img.jpg\" alt=\"Profile\" class=\"rounded-circle\">");
+			if(euser.getUser_images() != null) {
+				// Lấy tên files
+				avatar = euser.getUser_images();
+//				File file = new File(jsoft.library.Utilities_const.UPLOAD_PATH.label + "/user/" + avatar);
+//				// nêu không tìm thấy thì sẽ chuyển chuỗi base64 thành file 
+//				if(!file.exists()) {
+//					String avatarEncode = jsoft.library.Utilities_text.getImgPath(euser.getUser_images()).get(1);
+//					try(FileOutputStream outputStream = new FileOutputStream(file)) {				
+//						outputStream.write(jsoft.library.Utilities_file.decodeFile(avatarEncode));
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+			}
+
+			// 
+			if(!avatar.equalsIgnoreCase("")) {
+				out.append("<img src=\"/adv/adimgs/user/"+avatar+"\" alt=\"avatar\" class=\"rounded-circle avatar big-avatar\">");
+			} else {
+				out.append("<img src=\"/adv/adimgs/profile-img.jpg\" alt=\"avatar\" class=\"rounded-circle avatar big-avatar\">");
+			}
 			out.append("<h2>" + euser.getUser_fullname() + "</h2>");
 			out.append("<h3>" + euser.getUser_name() + "</h3>");
 			out.append("<div class=\"social-links mt-2\">");
@@ -227,19 +254,26 @@ public class UserProfiles extends HttpServlet {
 		out.append("<div class=\"tab-pane fade edit pt-3\" id=\"edit\">");
 
 		out.append("<!-- Profile Edit Form -->");
-		out.append("<form method=\"post\" action=\"/adv/user/profile\">");
+		out.append("<form method=\"post\" action=\"/adv/user/profile\" enctype=\"multipart/form-data\">");
 		out.append("<div class=\"row mb-3\">");
 		out.append("<label for=\"profileImage\" class=\"col-md-3 col-lg-2 col-form-label\">Profile Image</label>");
 		out.append("<div class=\"col-md-9 col-lg-10\">");
-		out.append("<img src=\"assets/img/profile-img.jpg\" alt=\"Profile\">");
+		
+		if(!avatar.equalsIgnoreCase("") && avatar != null) {
+			out.append("<input type=\"file\" id=\"eAvatar-input\" name=\"eAvatar-input\" value=\""+avatar+"\" accept=\"image/png, image/jpeg\"/>");
+			out.append("<img src=\"/adv/adimgs/user/"+avatar+"\" id=\"eAvatar\" alt=\"avatar\" class=\"rounded-circle avatar\"  />");
+		} else {
+			out.append("<input type=\"file\" id=\"eAvatar-input\" name=\"eAvatar-input\" accept=\"image/png, image/jpeg\" />");
+			out.append("<img src=\"/adv/adimgs/profile-img.jpg\" id=\"eAvatar\" alt=\"avatar\" class=\"rounded-circle avatar\"/>");
+		}
 		out.append("<div class=\"pt-2\">");
 		out.append(
-				"<a href=\"#\" class=\"btn btn-primary btn-sm\" title=\"Upload new profile image\"><i class=\"bi bi-upload\"></i></a>");
+				"<label for=\"eAvatar-input\" class=\"btn btn-primary btn-sm\" id=\"btnUploadAvatar\" title=\"Upload new profile image\"><i class=\"bi bi-upload\"></i></label>");
 		out.append(
 				"<a href=\"#\" class=\"btn btn-danger btn-sm\" title=\"Remove my profile image\"><i class=\"bi bi-trash\"></i></a>");
-		out.append("</div>");
-		out.append("</div>");
-		out.append("</div>");
+		out.append("</div>"); // pt-2
+		out.append("</div>");// col-lg-10
+		out.append("</div>"); // row
 
 		out.append("<div class=\"row mb-3 align-items-center\">");
 		out.append("<label for=\"fullName\" class=\"col-md-3 col-lg-2 text-end\">Họ và tên</label>");
@@ -389,32 +423,53 @@ public class UserProfiles extends HttpServlet {
 		out.append("<!-- Change Password Form -->");
 		out.append("<form method=\"post\" action=\"\">");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append(
-				"<label for=\"currentPassword\" class=\"col-md-4 col-lg-3 col-form-label\">Current Password</label>");
+		out.append("<div class=\"row mb-3 input-password-container\">");
+		if(euser.getUser_id() == user.getUser_id()) {
+			out.append(
+					"<label for=\"currentPassword\" class=\"col-md-4 col-lg-3 col-form-label\">Mật khẩu cũ</label>");
+			out.append("<div class=\"col-md-8 col-lg-9\">");
+			out.append("<input name=\"password\"  type=\"password\" class=\"form-control\" id=\"currentPassword\">");
+			out.append("<i class=\"show-btn bi bi-eye\" \"></i> ");
+			out.append("</div>");
+		} else {
+			out.append(
+					"<label for=\"currentPassword\" class=\"col-md-4 col-lg-3 col-form-label\">Sinh mật khẩu</label>");
+			out.append("<div class=\"col-md-8 col-lg-9\">");
+			out.append("<button type=\"button\" class=\"btn btn-warning\" id=\"btn-genPass\"><i class=\"fa-solid fa-shuffle\"></i> Ngẫu nhiên</button>");
+			out.append("<button type=\"button\" class=\"btn btn-primary\" id=\"btn-showPass\"><i class=\"fa-regular fa-eye\"></i> Xem</button>");
+			out.append("</div>");
+		}
+		out.append("</div>"); // row mb-3
+		out.append("<button type=\"button\" class=\"btn btn-primary\">Mã otp</button>");
+		out.append("<input type=\"text\" class=\"txt-otp form-control\" style=\"maxWidth: 40px\"/>");
+		
+		out.append("<div class=\"row mb-3 input-password-container\">");
+		out.append("<label for=\"newPassword\" class=\"col-md-4 col-lg-3 col-form-label\">Mật khẩu mới</label>");
 		out.append("<div class=\"col-md-8 col-lg-9\">");
-		out.append("<input name=\"password\" type=\"password\" class=\"form-control\" id=\"currentPassword\">");
+		out.append("<input name=\"newpassword\" type=\"password\" class=\"form-control \" id=\"newPassword\">");
+		out.append("<i class=\"show-btn bi bi-eye\" \"></i> ");
 		out.append("</div>");
 		out.append("</div>");
 
-		out.append("<div class=\"row mb-3\">");
-		out.append("<label for=\"newPassword\" class=\"col-md-4 col-lg-3 col-form-label\">New Password</label>");
-		out.append("<div class=\"col-md-8 col-lg-9\">");
-		out.append("<input name=\"newpassword\" type=\"password\" class=\"form-control\" id=\"newPassword\">");
-		out.append("</div>");
-		out.append("</div>");
-
-		out.append("<div class=\"row mb-3\">");
+		out.append("<div class=\"row mb-3 input-password-container\">");
 		out.append(
-				"<label for=\"renewPassword\" class=\"col-md-4 col-lg-3 col-form-label\">Re-enter New Password</label>");
+				"<label for=\"renewPassword\" class=\"col-md-4 col-lg-3 col-form-label\">Nhập lại mật khẩu mới</label>");
 		out.append("<div class=\"col-md-8 col-lg-9\">");
 		out.append("<input name=\"renewpassword\" type=\"password\" class=\"form-control\" id=\"renewPassword\">");
+		out.append("<i class=\"show-btn bi bi-eye\" \"></i> ");
 		out.append("</div>");
 		out.append("</div>");
 
 		out.append("<div class=\"text-center\">");
 		out.append("<button type=\"submit\" class=\"btn btn-primary\">Change Password</button>");
 		out.append("</div>");
+		
+		if (isEdit) {
+			// Truyền id theo cơ chế biến form ẩn để thực hiện edit
+			out.append("<input type=\"hidden\" name=\"idForPost\" value=\"" + id + "\" />");
+			out.append("<input type=\"hidden\" name=\"unameForPost\" value=\"" + euser.getUser_name() + "\" />");
+			out.append("<input type=\"hidden\" name=\"act\" value=\"changePass\" />");
+		}
 		out.append("</form><!-- End Change Password Form -->");
 
 		out.append("</div>");
@@ -465,6 +520,7 @@ public class UserProfiles extends HttpServlet {
 				String Ophone = request.getParameter("txtOPhone");
 				String email = request.getParameter("txtEmail");
 				String notes = request.getParameter("txtNotes");
+				Part avatar = request.getPart("eAvatar-input");
 				String birthday = request.getParameter("txtBirthday");
 
 				byte permis = jsoft.library.Utilities.getByteParam(request, "slcPermis");
@@ -472,6 +528,23 @@ public class UserProfiles extends HttpServlet {
 				if (fullname != null && !fullname.equalsIgnoreCase("")
 						&& email != null
 						&& !email.equalsIgnoreCase("") && Hphone != null && !Hphone.equalsIgnoreCase("")) {
+					String fileName = Path.of(avatar.getSubmittedFileName()).getFileName().toString();
+					String realPath = getServletContext().getRealPath("/adimgs/user");
+					System.out.println(realPath);
+					if(!Files.exists(Path.of(jsoft.library.Utilities_const.UPLOAD_PATH.label + "/user"))) {
+						Files.createDirectory(Path.of(jsoft.library.Utilities_const.UPLOAD_PATH.label + "/user"));
+					}
+					if(!Files.exists(Path.of(realPath))) {
+						Files.createDirectory(Path.of(realPath));
+					}
+					if(Files.notExists(Path.of(realPath + fileName))) {
+						avatar.write(realPath + fileName);
+						System.out.println("false");
+					}
+//					String avatarEncode = fileName + ";" + jsoft.library.Utilities_file.encodeFile(avatar.getInputStream().readAllBytes());
+					if(Files.notExists(Path.of(jsoft.library.Utilities_const.UPLOAD_PATH.label + "/user/" + fileName))) {
+						avatar.write(jsoft.library.Utilities_const.UPLOAD_PATH.label + "/user/" + fileName);
+					}
 					// Tạo đối tương lưu trữ thông tin
 					UserObject nuser = new UserObject();
 					nuser.setUser_id(id);
@@ -487,7 +560,12 @@ public class UserProfiles extends HttpServlet {
 					nuser.setUser_jobarea(jsoft.library.Utilities.encode(jobarea));
 					nuser.setUser_notes(jsoft.library.Utilities.encode(notes));
 					nuser.setUser_birthday(birthday);
-
+					nuser.setUser_images(fileName);
+					if(id == user.getUser_id()) {
+						user.setUser_images(fileName);
+						request.getSession().setAttribute("userLogined", user);
+					}
+					
 					ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
 					UserControl uc = new UserControl(cp);
 					if (cp == null) {
@@ -508,6 +586,63 @@ public class UserProfiles extends HttpServlet {
 					}
 				} else { // Tạo luồng mới khi sự kiện mới với tài nguyên mới
 					response.sendRedirect("/adv/user/list?err=upd");
+				}
+			} else if(action.equalsIgnoreCase("changePass")) {
+				String nPass = request.getParameter("newpassword");
+				String rnPass = request.getParameter("renewpassword");
+				if(id == user.getUser_id()) {
+					String oldPass = request.getParameter("password");
+					if(oldPass != null && !oldPass.equalsIgnoreCase("") && jsoft.library.Utilities_text.isValidPass(nPass) && jsoft.library.Utilities_text.isValidPass(rnPass) && jsoft.library.Utilities_text.checkValidPass(nPass, rnPass)) {
+						String uname = request.getParameter("unameForPost"); 
+						ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+						UserControl uc = new UserControl(cp);
+						if (cp == null) {
+							getServletContext().setAttribute("CPool", uc.getCP());
+						}
+						UserObject editPassUser = uc.getUserObject(uname, oldPass);
+						if(editPassUser != null) {
+							editPassUser.setUser_name(uname);
+							editPassUser.setUser_pass(nPass);
+							boolean result = uc.editUser(editPassUser, USER_EDIT_TYPE.PASS);
+							if(result) {
+								response.sendRedirect("/adv/user/profile?id="+id);
+							} else {
+								response.sendRedirect("/adv/user/profile?id="+id+"&err=errUpdPass");
+							}
+						} else {
+							response.sendRedirect("/adv/user/profile?id="+id+"&err=errEnterPass");
+						}
+						uc.releaseConnection();
+					} else {
+						response.sendRedirect("/adv/user/profile?id="+id+"&err=errPass");
+					}
+				} else {
+					if(jsoft.library.Utilities_text.isValidPass(nPass) && jsoft.library.Utilities_text.isValidPass(rnPass) && jsoft.library.Utilities_text.checkValidPass(nPass, rnPass)) {
+						String uname = request.getParameter("unameForPost"); 
+						ConnectionPool cp = (ConnectionPool) getServletContext().getAttribute("CPool");
+						UserControl uc = new UserControl(cp);
+						if (cp == null) {
+							getServletContext().setAttribute("CPool", uc.getCP());
+						}
+						UserObject editPassUser = uc.getUserObject(id);
+						if(editPassUser != null) {
+							editPassUser.setUser_name(uname);
+							editPassUser.setUser_pass(nPass);
+							boolean result = uc.editUser(editPassUser, USER_EDIT_TYPE.PASS);
+							if(result) {
+								boolean sendok = jsoft.library.Utilities.sendRandomPassToEmail(editPassUser, rnPass);
+								System.out.println("sendok: " + sendok);
+								response.sendRedirect("/adv/user/profile?id="+id);
+							} else {
+								response.sendRedirect("/adv/user/profile?id="+id+"&err=errUpdPass");
+							}
+						} else {
+							response.sendRedirect("/adv/user/profile?id="+id+"&err=errEnterPass");
+						}
+						uc.releaseConnection();
+					} else {
+						response.sendRedirect("/adv/user/profile?id="+id+"&err=errPass");
+					}
 				}
 			}
 		} else { // trường hơp không tồn tại id

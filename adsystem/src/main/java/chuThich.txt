@@ -52,3 +52,39 @@ ALTER TABLE `jp210302_data`.`tbluser` MODIFY COLUMN `user_deleted` TINYINT(1) DE
 menu = ur
 act = {list, trash}
 actives.put(list), actives.put(utrash) 
+
+- Phân trang sẽ có dạng
+1, 2, ..., 10, 11, [12], 13, 14, ..., 34, 35(trang cuối)
+
+-------------- Thư viện về tìm hiểu jsoup: thư viện tạo tương tác với html tương tự js nhưng chạy trên server
+
+------------ Về nhà làm sửa xoa section, hệ thống tin nhắn, chuyển đường dẫn với thêm attribute trên url
+
+------------- Ngày 25/09
+* usercase: Add/edit user
+	- Thêm từng thông tin của người sử dụng
+	- Thêm từ file
+		- excel -> apache poi (Geek for geek)
+		- hệ thống khác
+		- xml / json
+	- filter (craw)
+	- copy
+	- mạng xã hội
+		- facebook
+		- zalo
+		- ...
+	* Del user
+		- từng user (tuyệt đối / tương đối)
+		- Nhóm (tuyệt đối / tương đối)
+	* report
+		- datareport: xuất report excel / pdf
+* Technical (runtime) - Kỹ sư
+	- jdbc
+	- jsp / servlet
+	- entity
+* Technology (Spring boot - development time) - Cử nhân	
+	- config
+	- lib
+	
+
+		

@@ -14,6 +14,7 @@ import org.javatuples.Quartet;
 import jsoft.object.UserObject;
 
 import jsoft.*;
+import jsoft.library.Utilities;
 
 /**
  * Servlet implementation class View
@@ -67,10 +68,15 @@ public class UserList extends HttpServlet {
 			getServletContext().setAttribute("CPool", uc.getCP());
 		}
 		
+		// Lấy từ khóa tìm kiếm
+		String key = request.getParameter("key");
+		String saveKey = (key != null && !key.equalsIgnoreCase("")) ? key.trim() : "";
+		
 		// Lấy câu trúc
 		UserObject similar = new UserObject();
 		similar.setUser_id(user.getUser_id());
 		similar.setUser_permission(user.getUser_permission());
+		similar.setUser_name(saveKey);
 		
 		// Tìm tham số xác định loại danh sách
 		String trash = request.getParameter("trash");
@@ -85,8 +91,12 @@ public class UserList extends HttpServlet {
 			title = "Danh sách người bị xóa";
 		}
 
+		short page = Utilities.getShortParam(request, "page");
+		if(page < 1) {
+			page = 1;
+		}
 		// Lấy cấu trúc
-		Quartet<UserObject, Short, Byte, USER_SORT_TYPE> infors = new Quartet<>(similar, (short) 1, (byte) 10,
+		Quartet<UserObject, Short, Byte, USER_SORT_TYPE> infors = new Quartet<>(similar, page, (byte) 30,
 				USER_SORT_TYPE.NAME);
 
 		ArrayList<String> viewList = uc.viewUsers(infors);
@@ -206,18 +216,18 @@ public class UserList extends HttpServlet {
 					"<button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\"><i class=\"bi bi-x-lg\"></i> Thoát</button>");
 			out.append("</div>");// modal-footer
 			out.append("</div>");// modal-content
+			
+			out.append("<input type=\"hidden\" name=\"act\" value=\"addUser\" />");
 			out.append("</form>");
 			out.append("</div>");// modal-dialog
 			out.append("</div>");// modal
 		}
 
 		out.append(viewList.get(0)); // Phần trình bày user list
-
+		out.append(viewList.get(2)); // Phần phân trang
 		out.append("</div>"); // card-body
 		out.append("</div>"); // card
 		out.append("</div>"); // col-lg-12
-
-		out.append("</div>"); // row
 		
 		out.append("<div class=\"row\">");
 		out.append("<div class=\"col-lg-12\">");
@@ -246,50 +256,62 @@ public class UserList extends HttpServlet {
 		
 		// Thiết lập tập ký tự cần lấy. Việc thiết lập này cần xác định từ đầu
 		request.setCharacterEncoding("utf-8");
-		
-		// Lấy các thông tin bắt buộc
-		String name = request.getParameter("txtUsername");
-		String pass1 = request.getParameter("txtUserpass");
-		String pass2 = request.getParameter("txtUserpass2");
-		String email = request.getParameter("txtUseremail");
-		String phone = request.getParameter("txtUserphone");
+		String act = request.getParameter("act");
+		if(act != null) {
+			if(act.equalsIgnoreCase("addUser")) {
+				// Lấy các thông tin bắt buộc
+				String name = request.getParameter("txtUsername");
+				String pass1 = request.getParameter("txtUserpass");
+				String pass2 = request.getParameter("txtUserpass2");
+				String email = request.getParameter("txtUseremail");
+				String phone = request.getParameter("txtUserphone");
 
-		byte permis = jsoft.library.Utilities.getByteParam(request, "slcPermis");
+				byte permis = jsoft.library.Utilities.getByteParam(request, "slcPermis");
 
-		if (name != null && !name.equalsIgnoreCase("") && jsoft.library.Utilities_text.checkValidPass(pass1, pass2) && email != null
-				&& !email.equalsIgnoreCase("") && phone != null && !phone.equalsIgnoreCase("") && permis > 0) {
-			// Lấy tiếp thông tin không bắt buộc
-			String fullname = request.getParameter("txtUserfullname");
-			// Tạo đối tương lưu trữ thông tin
-			UserObject nuser = new UserObject();
-			nuser.setUser_name(name);
-			nuser.setUser_fullname(jsoft.library.Utilities.encode(fullname));
-			nuser.setUser_pass(pass1);
-			nuser.setUser_parent_id(user.getUser_id());
-			nuser.setUser_email(email);
-			nuser.setUser_homephone(phone);
-			nuser.setUser_created_date(jsoft.library.Utilities_date.getDate());
-			nuser.setUser_permission(permis);
-			
-			ConnectionPool cp = (ConnectionPool)getServletContext().getAttribute("CPool");
-			UserControl uc = new UserControl(cp);
-			if(cp == null) {
-				getServletContext().setAttribute("CPool", uc.getCP());
+				if (name != null && !name.equalsIgnoreCase("") && jsoft.library.Utilities_text.checkValidPass(pass1, pass2) && email != null
+						&& !email.equalsIgnoreCase("") && phone != null && !phone.equalsIgnoreCase("") && permis > 0) {
+					// Lấy tiếp thông tin không bắt buộc
+					String fullname = request.getParameter("txtUserfullname");
+					// Tạo đối tương lưu trữ thông tin
+					UserObject nuser = new UserObject();
+					nuser.setUser_name(name);
+					nuser.setUser_fullname(jsoft.library.Utilities.encode(fullname));
+					nuser.setUser_pass(pass1);
+					nuser.setUser_parent_id(user.getUser_id());
+					nuser.setUser_email(email);
+					nuser.setUser_homephone(phone);
+					nuser.setUser_created_date(jsoft.library.Utilities_date.getDate());
+					nuser.setUser_permission(permis);
+					
+					ConnectionPool cp = (ConnectionPool)getServletContext().getAttribute("CPool");
+					UserControl uc = new UserControl(cp);
+					if(cp == null) {
+						getServletContext().setAttribute("CPool", uc.getCP());
+					}
+					
+					// Thực hiện thêm mới
+					boolean result = uc.addUser(nuser);
+					
+					// Trả về kết nối
+					uc.releaseConnection();
+					
+					if(result) {
+						response.sendRedirect("/adv/user/list");
+					} else {
+						response.sendRedirect("/adv/user/list?err=add");
+					}
+				} else { 
+					response.sendRedirect("/adv/user/list?err=valueadd");
+				}
+			}else if(act.equalsIgnoreCase("search")) {
+				String key= request.getParameter("keyword");
+				if(key != null && !key.equalsIgnoreCase("")) {
+					response.sendRedirect("?key="+key);				
+				} else {
+					response.sendRedirect("/adv/user/list");
+				}
 			}
-			
-			// Thực hiện thêm mới
-			boolean result = uc.addUser(nuser);
-			
-			// Trả về kết nối
-			uc.releaseConnection();
-			
-			if(result) {
-				response.sendRedirect("/adv/user/list");
-			} else {
-				response.sendRedirect("/adv/user/list?err=add");
-			}
-		} else { // Tạo luồng mới khi sự kiện mới với tài nguyên mới
-			response.sendRedirect("/adv/user/list?err=valueadd");
 		}
+		
 	}
 }

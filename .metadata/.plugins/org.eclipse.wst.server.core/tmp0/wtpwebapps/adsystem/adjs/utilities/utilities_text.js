@@ -1,3 +1,8 @@
+let number = "123456789";
+let capLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+let lowLetters = "abcdefghijklmnopqrstuvwxyz";
+let specChar = "@#$&*_";
+
 export const removeVietnameseTones = (str) => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
   str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -41,3 +46,41 @@ export const createAlias = (name) => {
 
   return alias;
 };
+
+export const generatePassword = (length) => {
+	var pass = "";
+	pass += number.charAt(Math.floor(Math.random() * number.length));
+	pass += capLetters.charAt(Math.floor(Math.random() * capLetters.length));
+	pass += lowLetters.charAt(Math.floor(Math.random() * lowLetters.length));
+	pass += specChar.charAt(Math.floor(Math.random() * specChar.length));
+	var remaintLength = length - 4;
+	for(var i = 0; i < remaintLength; i++) {
+		pass += determineChar();
+	}
+	return shuffleString(pass);
+}
+
+function determineChar() {
+	var charSetIndex = Math.floor(Math.random() * 4);
+	switch(charSetIndex) {
+		case 0:
+			return number.charAt(Math.floor(Math.random() * number.length));
+		case 1:
+			return capLetters.charAt(Math.floor(Math.random() * capLetters.length));
+		case 2: 
+			return lowLetters.charAt(Math.floor(Math.random() * lowLetters.length));
+		default:
+			return specChar.charAt(Math.floor(Math.random() * specChar.length));
+	}
+}
+
+function shuffleString(str) {
+	var result = str.split('');
+	for(var i = 0; i < str.length; i++) {
+		var index = Math.floor(Math.random() * str.length);
+		var tmp = result[index];
+		result[index] = result[i];
+		result[i] = tmp;
+	}
+	return result.join('');
+}

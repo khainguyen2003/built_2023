@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link href="./adcss/select2.min.css" rel="stylesheet" />
+
+    <script src="./adjs/jquery-3.7.1.min.js" type="module"></script>
+
+    <script src="./adjs/select2.full.min.js" type="module"></script>
+  </head>
+  <body>
+    <select
+      class="form-select bg-white"
+      id="manager"
+      name="slcManager"
+      required=""
+    >
+      <option value="20">Mikado (admin)</option>
+      <option value="36">Phạm Thuần Lãm (lampt)</option>
+      <option value="37">Phạm Ngọc Ánh (anhpn)</option>
+      <option value="38">Bùi Thị Hạnh (hanhbt)</option>
+      <option value="39">Trần Trung Dũng (dungtt)</option>
+      <option value="40">Nguyễn Trọng Hậu (haunt)</option>
+      <option value="42">Đỗ Thu Hiền (hiendt)</option>
+      <option value="44">Nguyễn Hoài Châu (chaunh)</option>
+      <option value="50">Tr?n Lang Thang (langthang213)</option>
+      <option value="51">Tr?n Lang Thang (langthang213)</option>
+      <option value="52">Hoàng Quang Huy (admin123)</option>
+      <option value="54">Hoàng V?n Quang Huy (ad2135)</option>
+      <option value="58">Nguy?n V?n Kh?i (ad7899)</option>
+      <option value="60">Nguyễn Văn Khải (admin12332)</option>
+    </select>
+
+    <script>
+      $(document).ready(function () {
+        $("#manager").select2();
+      });
+    </script>
+  </body>
+</html>

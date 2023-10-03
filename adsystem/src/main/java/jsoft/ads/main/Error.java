@@ -71,6 +71,15 @@ public class Error extends HttpServlet {
 			case "acclogin":
 				out.append("Có lỗi khi lấy giá trị xóa");
 				break;
+			case "errPass":
+				out.append("Có lỗi khi thay đổi mật khẩu");
+				break;
+			case "errEnterPass":
+				out.append("Sai mật khẩu");
+				break;
+			case "errUpdPass":
+				out.append("Có lỗi khi cập nhật mật khẩu");
+				break;
 			default:
 				out.append("Có lỗi xin vui lòng kiểm tra lại");
 			}

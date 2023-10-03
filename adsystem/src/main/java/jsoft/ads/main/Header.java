@@ -36,6 +36,29 @@ public class Header extends HttpServlet {
 		// Tạo đối tượng thực hiện xuất nội dung
 		PrintWriter out = response.getWriter();
 		UserObject user = (UserObject) request.getSession().getAttribute("userLogined");
+		String url = "/adv/view";
+		
+		String pos = request.getParameter("pos");
+		if(pos != null) {
+			if(pos.contains("ur")) {
+				String func = pos.substring(2);
+				switch (func) {
+				case "list": {
+					url = "/adv/user/list";
+					break;
+				}
+				case "trash":
+					url = "/adv/user/list?trash";
+					break;
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + func);
+				}
+			}
+		}
+		
+		// Lấy từ khóa tìm kiếm
+		String key = request.getParameter("key");
+		String saveKey = (key != null && !key.equalsIgnoreCase("")) ? key.trim() : "";
 		
 		out.append("<!DOCTYPE html>");
 		out.append("<html lang=\"en\">");
@@ -57,10 +80,13 @@ public class Header extends HttpServlet {
 		out.append(
 				"<link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i\" rel=\"stylesheet\">");
 
+		out.append("<script src=\"/adv/adjs/jquery-3.7.1.min.js\"></script>");
 		out.append("<script src=\"/adv/adjs/bootstrap.bundle.min.js\"></script>");
+		out.append("<script src=\"/adv/adjs/select2.full.min.js\"></script>");
 		out.append("<!-- Vendor CSS Files -->");
 		out.append("<link href=\"/adv/adcss/bootstrap.min.css\" rel=\"stylesheet\">");
 		out.append("<link href=\"/adv/adcss/bootstrap-icons/bootstrap-icons.css\" rel=\"stylesheet\">");
+		out.append("<link href=\"/adv/adcss/select2.min.css\" rel=\"stylesheet\">");
 //		out.append("<link href=\"/adv/adcss/boxicons/css/boxicons.min.css\" rel=\"stylesheet\">");
 //		out.append("<link href=\"/adv/adcss/remixicon/remixicon.css\" rel=\"stylesheet\">");
 
@@ -82,9 +108,10 @@ public class Header extends HttpServlet {
 		out.append("</div><!-- End Logo -->");
 
 		out.append("<div class=\"search-bar\">");
-		out.append("<form class=\"search-form d-flex align-items-center\" method=\"POST\" action=\"#\">");
-		out.append("<input type=\"text\" name=\"query\" placeholder=\"Search\" title=\"Enter search keyword\">");
+		out.append("<form class=\"search-form d-flex align-items-center\" method=\"POST\" action=\""+url+"\">");
+		out.append("<input type=\"text\" name=\"keyword\" placeholder=\"Search\" value=\""+saveKey+"\" title=\"Enter search keyword\">");
 		out.append("<button type=\"submit\" title=\"Search\"><i class=\"bi bi-search\"></i></button>");
+		out.append("<input type=\"hidden\" name=\"act\" value=\"search\" />");
 		out.append("</form>");
 		out.append("</div><!-- End Search Bar -->");
 
@@ -242,7 +269,12 @@ public class Header extends HttpServlet {
 
 		out.append(
 				"<a class=\"nav-link nav-profile d-flex align-items-center pe-0\" href=\"#\" data-bs-toggle=\"dropdown\">");
-		out.append("<img src=\"/adv/adimgs/profile-img.jpg\" alt=\"Profile\" class=\"rounded-circle\">");
+		String avatar = user.getUser_images();
+		if(avatar != null) {
+			out.append("<img src=\"/adv/adimgs/user/").append(avatar).append("\" style=\"width:40px;height:40px;\" alt=\"Profile\" class=\"rounded-circle avatar\">");
+		} else {
+			out.append("<img src=\"/adv/adimgs/profile-img.jpg\" alt=\"avatar\" class=\"rounded-circle avatar\">");
+		}
 		out.append("<span class=\"d-none d-md-block dropdown-toggle ps-2\">").append(user.getUser_name()).append("</span>");
 		out.append("</a><!-- End Profile Iamge Icon -->");
 
@@ -256,7 +288,7 @@ public class Header extends HttpServlet {
 		out.append("</li>");
 
 		out.append("<li>");
-		out.append("<a class=\"dropdown-item d-flex align-items-center\" href=\"/adv/user/profile\">");
+		out.append("<a class=\"dropdown-item d-flex align-items-center\" href=\"/adv/user/profile?id="+user.getUser_id()+"\">");
 		out.append("<i class=\"bi bi-person\"></i>");
 		out.append("<span>My Profile</span>");
 		out.append("</a>");
@@ -266,7 +298,7 @@ public class Header extends HttpServlet {
 		out.append("</li>");
 
 		out.append("<li>");
-		out.append("<a class=\"dropdown-item d-flex align-items-center\" href=\"/adv/user/profile\">");
+		out.append("<a class=\"dropdown-item d-flex align-items-center\" href=\"/adv/user/profile?id="+user.getUser_id()+"\">");
 		out.append("<i class=\"bi bi-gear\"></i>");
 		out.append("<span>Account Settings</span>");
 		out.append("</a>");

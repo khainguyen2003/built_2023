@@ -53,6 +53,7 @@ public class Footer extends HttpServlet {
 
 		out.append("<!-- Vendor JS Files -->");
 		out.append("<script src=\"/adv/adjs/apexcharts/apexcharts.min.js\" charset=\"utf-8\"></script>");
+		
 //		out.append("<script src=\"/adv/adjs/chart.js/chart.umd.js\"></script>");
 //		out.append("<script src=\"/adv/adjs/echarts/echarts.min.js\"></script>");
 

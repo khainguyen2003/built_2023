@@ -3,6 +3,8 @@ package jsoft.ads.user;
 import java.sql.*;
 import java.util.ArrayList;
 
+import org.javatuples.Pair;
+
 import jsoft.*;
 import jsoft.ads.basic.*;
 
@@ -99,7 +101,7 @@ public class UserImpl extends BasicImpl implements User {
 						+ "user_mobilephone=?, user_homephone=?, user_officephone=?, user_email=?, "
 						+ "user_address=?, user_jobarea=?, user_job=?, user_position=?, user_applyyear=?, "
 						+ "user_notes=?, "
-						+ "user_last_modified=?, user_actions=? ";
+						+ "user_last_modified=?, user_actions=?, user_image=? ";
 				break;
 			case SETTINGS:
 				sql += "user_permission=?, user_roles=? ";
@@ -133,7 +135,9 @@ public class UserImpl extends BasicImpl implements User {
 				pre.setString(12, item.getUser_notes());
 				pre.setString(13, item.getUser_last_modified());
 				pre.setByte(14, item.getUser_actions());
-				pre.setInt(15, item.getUser_id());
+				pre.setString(15, item.getUser_images());
+				pre.setInt(16, item.getUser_id());
+				
 				break;
 			case SETTINGS:
 				pre.setLong(1, item.getUser_permission());
@@ -260,6 +264,8 @@ public class UserImpl extends BasicImpl implements User {
 	public ArrayList<ResultSet> getUsers(UserObject similar, int at, byte total, USER_SORT_TYPE type) {
 
 		String sql = "SELECT * FROM tbluser ";
+		String sql2 = "SELECT COUNT(user_id) AS total FROM tbluser ";
+		sql2 += this.createConditions(similar);
 		sql += this.createConditions(similar);
 		switch (type) {
 			case NAME:
@@ -284,8 +290,8 @@ public class UserImpl extends BasicImpl implements User {
 		
 		StringBuilder multiSelect = new StringBuilder();
 		multiSelect.append(sql);
-		System.out.println(sql);
-		multiSelect.append("SELECT COUNT(user_id) AS total FROM tbluser; ");
+		multiSelect.append(sql2);
+		
 		return this.getReList(multiSelect.toString());
 	}
 	
@@ -303,6 +309,18 @@ public class UserImpl extends BasicImpl implements User {
 					conds.append(" AND ((user_parent_id=").append(id).append(") OR (user_id=").append(id).append("))");
 				}
 			}
+			
+			// Từ khóa tìm kiếm
+			String key = similar.getUser_name();
+			if(key != null && !key.equalsIgnoreCase("")) {
+				conds.append(" AND (");
+				conds.append("(user_name LIKE '%"+key+"%') OR ");
+				conds.append("(user_fullname LIKE '%"+key+"%') OR ");
+				conds.append("(user_address LIKE '%"+key+"%') OR ");
+				conds.append("(user_email LIKE '%"+key+"%') ");
+				conds.append(")");
+			}
+			
 			if(similar.isUser_deleted()) {
 				conds.append(" AND (user_deleted=1) ");
 			} else {
