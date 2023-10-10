@@ -51,7 +51,6 @@ public class ArticleModel {
 	// lấy về 1 cặp các article mới nhất và xem nhiều nhất
 	public Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> getArticleObjects(Triplet<ArticleObject, Short, Byte> infors) {
 		ArrayList<ResultSet> res = this.a.getArticles(infors);
-		
 		return new Pair<>(this.getArticleObjects(res.get(0)), this.getArticleObjects(res.get(1)));
 	}
 	
@@ -60,7 +59,7 @@ public class ArticleModel {
 		ArticleObject item = null;
 		if(rs != null) {
 			try {
-				if(rs.next()) {
+				while(rs.next()) {
 					item = new ArticleObject();
 					item.setArticle_id(rs.getShort("article_id"));
 					item.setArticle_title(rs.getString("article_title"));
@@ -84,7 +83,6 @@ public class ArticleModel {
 				System.out.println(e);
 			}
 		}
-		
 		
 		
 		return items;

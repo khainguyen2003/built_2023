@@ -286,7 +286,11 @@ public class UserImpl extends BasicImpl implements User {
 			default:
 				sql += "ORDER BY user_id ASC ";
 		}
-		sql += "LIMIT " + at + ", " + total + "; ";
+		if(total > 0) {
+			sql += "LIMIT " + at + ", " + total + "; ";
+		} else {
+			sql += ";";
+		}
 		
 		StringBuilder multiSelect = new StringBuilder();
 		multiSelect.append(sql);

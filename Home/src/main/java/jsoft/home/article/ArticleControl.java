@@ -23,4 +23,16 @@ public class ArticleControl {
 	public ArticleObject getArticleObject(int id) {
 		return this.am.getArticleObject(id);
 	}
+	// giá trị truyền vào: đối tượng article, trang khởi đầu, số bài viết trên 1 trang
+	public ArrayList<String> viewPostGrid(Triplet<ArticleObject, Short, Byte> infors) {
+		Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> datas = this.am.getArticleObjects(infors);
+		
+		return ArticleLibrary.viewPostGrid(datas);
+	}
+	
+	public ArrayList<String> viewNews(Triplet<ArticleObject, Short, Byte> infors) {
+		Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> datas = this.am.getArticleObjects(infors);
+		
+		return ArticleLibrary.viewNews(datas);
+	}
 }

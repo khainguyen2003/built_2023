@@ -6,8 +6,9 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value=""/>
+		<item key="selection" value="createCell("/>
 		<list key="findhistory">
+			<item value="createCell("/>
 			<item value=".indexof"/>
 			<item value="\\"/>
 			<item value="avatar"/>
@@ -22,9 +23,9 @@
 			<item value="out"/>
 			<item value="input-password"/>
 			<item value="class=\&quot;input-password\&quot;"/>
-			<item value="id=\&quot;show-btn\&quot;"/>
 		</list>
 		<list key="replacehistory">
+			<item value="createCell(sheet,"/>
 			<item value="/"/>
 			<item value="/home/img/"/>
 			<item value="home/img"/>
@@ -39,7 +40,6 @@
 			<item value="name"/>
 			<item value="class=\&quot;invalid-feedback\&quot;"/>
 			<item value="dateFormat"/>
-			<item value="short"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

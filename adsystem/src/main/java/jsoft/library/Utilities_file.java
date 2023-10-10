@@ -1,18 +1,37 @@
 package jsoft.library;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
+import org.apache.poi.common.usermodel.fonts.FontCharset;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import jsoft.object.UserObject;
 
 public class Utilities_file {
 	/**
-	 * Hàm encode file
-	 * @param path đường dẫn của tệp cần encode
-	 * @return một chuỗi encode file dạng base64
+	 * HÃ m encode file
+	 * @param path Ä‘Æ°á»�ng dáº«n cá»§a tá»‡p cáº§n encode
+	 * @return má»™t chuá»—i encode file dáº¡ng base64
 	 */
 	public static String encodeFile(String path) {
 		byte[] bytes = new byte[0];
@@ -52,9 +71,9 @@ public class Utilities_file {
 	}
 	
 	/**
-	 * Hàm kiểm tra định dạng hình ảnh
-	 * @param imageData file image cần kiểm tra định dạng
-	 * @return định dạng của file
+	 * HÃ m kiá»ƒm tra Ä‘á»‹nh dáº¡ng hÃ¬nh áº£nh
+	 * @param imageData file image cáº§n kiá»ƒm tra Ä‘á»‹nh dáº¡ng
+	 * @return Ä‘á»‹nh dáº¡ng cá»§a file
 	 */
     public static String getImageFormat(byte[] imageData) {
         if (imageData.length >= 2 && imageData[0] == (byte) 0xFF && imageData[1] == (byte) 0xD8) {
@@ -76,7 +95,7 @@ public class Utilities_file {
                    imageData[2] == (byte) 0x78 && (imageData[3] == (byte) 0x6D || imageData[3] == (byte) 0x6C)) {
             return "svg";
         } else {
-            return "Không xác định";
+            return "KhÃ´ng xÃ¡c Ä‘á»‹nh";
         }
     }
     public static String getImageFormat(String base64Encode) {
@@ -92,11 +111,109 @@ public class Utilities_file {
     	
     	return imageType;
     }
+    
+    /* ================= export excel function start =================*/
+	/* Phương thức exportExcel v1
+	 * public static XSSFWorkbook exportExcel(Map<String, Object[]> data) { // Blank
+	 * workbook XSSFWorkbook workbook = new XSSFWorkbook();
+	 * 
+	 * // Creating a blank Excel sheet XSSFSheet sheet =
+	 * workbook.createSheet("student Details");
+	 * 
+	 * Set<String> keyset = data.keySet(); int rownum = 0;
+	 * 
+	 * for (String key : keyset) {
+	 * 
+	 * // Creating a new row in the sheet Row row = sheet.createRow(rownum++);
+	 * 
+	 * Object[] objArr = data.get(key);
+	 * 
+	 * int cellnum = 0;
+	 * 
+	 * for (Object obj : objArr) {
+	 * 
+	 * // This line creates a cell in the next // column of that row Cell cell =
+	 * row.createCell(cellnum++);
+	 * 
+	 * if (obj instanceof String) cell.setCellValue((String)obj);
+	 * 
+	 * else if (obj instanceof Integer) cell.setCellValue((Integer)obj); } }
+	 * 
+	 * return workbook; }
+	 */
 
-	public static void main(String[] args) {
-		String base64ImgEncode = encodeFile("C:\\Users\\pc\\Dropbox\\PC\\Pictures\\anh-doraemon-hai-huoc_033145846.png");
-			String fileFormat = getImageFormat(base64ImgEncode);
-			System.out.println(fileFormat);
-//		System.out.println(base64ImgEncode);
+    /** Phương thức export excel v2
+     * 
+     * @param row
+     * @param columnCount
+     * @param value
+     * @param style
+     */
+    public static void createCell(XSSFSheet sheet, Row row, int columnCount, Object value, CellStyle style) {
+    	sheet.autoSizeColumn(columnCount);
+		Cell cell = row.createCell(columnCount);
+		if (value instanceof Integer) {
+			cell.setCellValue((Integer) value);
+		} 
+        else if (value instanceof Long) {
+			cell.setCellValue((Long) value);
+		} else if (value instanceof Boolean) {
+			cell.setCellValue((Boolean) value);
+		} else if(value instanceof Short) {
+			cell.setCellValue((short) value);
+		} else {
+			cell.setCellValue((String) value);
+		}
+		cell.setCellStyle(style);
 	}
+
+	public static XSSFWorkbook write(ArrayList<UserObject> data) {
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = workbook.createSheet("Exam Records");
+		// Tao tiêu đề
+		Row row = sheet.createRow(0);
+
+		// set style cho tiêu đề
+		CellStyle style = workbook.createCellStyle();
+		XSSFFont font = workbook.createFont();
+		font.setBold(true);
+		font.setFontHeight(16);
+		style.setFont(font);
+//		style.setFillBackgroundColor("#FFE4D6");
+		// Thêm giá trị vào các cột tiêu đề
+		createCell(sheet, row, 0, "STT", style);
+		createCell(sheet, row, 1, "Tên", style);
+		createCell(sheet, row, 2, "Họ và tên", style);
+		createCell(sheet, row, 3, "Score", style);
+		int rowCount = 1;
+		
+		font.setFontHeight(14);
+		style.setFont(font);
+
+		for (UserObject record : data) {
+			row = sheet.createRow(rowCount++);
+			int columnCount = 0;
+
+			createCell(sheet,row, columnCount++, record.getUser_id(), style);
+			createCell(sheet,row, columnCount++, jsoft.library.Utilities.decode(record.getUser_fullname()), style);
+			createCell(sheet,row, columnCount++, record.getUser_last_logined(), style);
+			createCell(sheet,row, columnCount++, record.getUser_logined(), style);
+
+		}
+		
+		return workbook;
+	}
+
+	public static void generate(HttpServletResponse response, ArrayList<UserObject> datas) throws IOException {
+		
+		XSSFWorkbook workbook = write(datas);
+		ServletOutputStream outputStream = response.getOutputStream();
+		workbook.write(outputStream);
+		workbook.close();
+
+		outputStream.close();
+
+	}
+	
+	/* ================= export excel function end =================*/
 }

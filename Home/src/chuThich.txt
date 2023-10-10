@@ -13,3 +13,6 @@ dấu huyền bằng với chiều cao chữ T in đậm
 - Chữ o không quá tròn
 - font chữ ko chân
 - chữ đ đầu không quá nhỏ
+
+- Nd trang web không nên đưa chữ trực tiếp vì sẽ vi phạm nguyên tắc đa ngôn ngữ mà nên đưa qua biến với giá trị khởi tạo là chữ muốn hiên thị ban đầu
+khi có một sự kiện xảy ra (như thay đổi ngôn ngữ thành tiếng anh) thì nội dung sẽ thay đổi

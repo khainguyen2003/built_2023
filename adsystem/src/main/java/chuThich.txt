@@ -67,7 +67,7 @@ actives.put(list), actives.put(utrash)
 		- excel -> apache poi (Geek for geek)
 		- hệ thống khác
 		- xml / json
-	- filter (craw)
+	- filter (crawl data)
 	- copy
 	- mạng xã hội
 		- facebook

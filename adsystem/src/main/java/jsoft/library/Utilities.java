@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -169,6 +172,40 @@ public class Utilities {
 		}
 	    return false;
 	}
+	
+	public static String getCurrenPar(HttpServletRequest request) {
+		String currentPar = request.getRequestURI().toString();
+        String queryString = request.getQueryString();
+        if(queryString != null) {
+        	currentPar += "?" + queryString;
+        }
+        return currentPar;
+	}
+	
+	public static String addParameter(HttpServletRequest request, String paramName, String paramValue) {
+		String currentURI = request.getRequestURI().toString();
+        String queryString = request.getQueryString();
+
+        // Nếu đường dẫn URL hiện tại đã chứa các tham số, thì thêm tham số mới vào sau dấu "&"
+        if (queryString == null) {
+            queryString = paramName + "=" + paramValue;
+        } else {
+            queryString += "&" + paramName + "=" + paramValue;
+        }
+
+        try {
+            // Encode lại queryString để đảm bảo nó chứa các ký tự hợp lệ trong URL
+            queryString = URLEncoder.encode(queryString, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // Xử lý lỗi encoding ở đây nếu cần
+        }
+
+        // Tạo đường dẫn URL mới bằng cách kết hợp đường dẫn hiện tại và queryString
+        String newURL = currentURI + "?" + queryString;
+
+        return newURL;
+    }
 	
 	public static void main(String[] args) {
 	  

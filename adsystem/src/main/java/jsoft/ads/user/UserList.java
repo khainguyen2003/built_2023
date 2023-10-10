@@ -223,6 +223,8 @@ public class UserList extends HttpServlet {
 			out.append("</div>");// modal
 		}
 
+		out.append("<a href=\"/adv/export/excel?pos="+pos+"\" class=\"btn btn-primary\">Xuất file</a>");
+
 		out.append(viewList.get(0)); // Phần trình bày user list
 		out.append(viewList.get(2)); // Phần phân trang
 		out.append("</div>"); // card-body

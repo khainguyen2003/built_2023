@@ -48,20 +48,19 @@ public class ArticleImpl extends BasicImpl implements Article {
 		sql.append("SELECT * FROM tblarticle ");
 		sql.append("LEFT JOIN tblcategory ON article_category_id=category_id ");
 		sql.append("LEFT JOIN tblsection ON category_section_id=section_id ");
-		sql.append("WHERE (article_delete=0) AND (article_enable=1) ");
+		sql.append("WHERE (article_delete=0) AND (article_enable=1)");
 		sql.append(this.createConditions(similar).toString());
 		sql.append("ORDER BY article_id DESC ");
-		sql.append("LIMIT ").append(at).append(", ").append(totalPerPage);
+		sql.append("LIMIT ").append(at).append(", ").append(totalPerPage).append("; ");
 		
 		// Danh sách bài viết xem nhiều nhất
 		sql.append("SELECT * FROM tblarticle ");
 		sql.append("LEFT JOIN tblcategory ON article_category_id=category_id ");
 		sql.append("LEFT JOIN tblsection ON category_section_id=section_id ");
-		sql.append("WHERE (article_delete=0) AND (article_enable=1) ");
+		sql.append("WHERE (article_delete=0) AND (article_enable=1)");
 		sql.append(this.createConditions(similar).toString());
 		sql.append("ORDER BY article_visited DESC ");
-		sql.append("LIMIT ").append(at).append(", ").append(totalPerPage);
-		
+		sql.append("LIMIT ").append(at).append(", ").append(totalPerPage).append("; ");
 		return this.getReList(sql.toString());
 	}
 	
@@ -78,7 +77,7 @@ public class ArticleImpl extends BasicImpl implements Article {
 			}
 			
 			if(sid > 0) {
-				tmp.append("(article_section_id=").append(sid).append(")");
+				tmp.append("(article_section_id=").append(sid).append(") ");
 			}
 			
 			short cid = similar.getArticle_category_id();
@@ -89,7 +88,7 @@ public class ArticleImpl extends BasicImpl implements Article {
 				if(!tmp.toString().equals("")) {
 					tmp.append(" AND ");
 				}
-				tmp.append("(article_category_id=").append(cid).append(")");
+				tmp.append("(article_category_id=").append(cid).append(") ");
 			}
 		}
 		if(!tmp.toString().equals("")) {
