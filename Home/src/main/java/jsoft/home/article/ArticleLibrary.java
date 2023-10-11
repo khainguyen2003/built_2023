@@ -78,20 +78,28 @@ public class ArticleLibrary {
 		return view;
 	}
 	
-	public static ArrayList<String> viewNews(Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> datas) {
+	public static ArrayList<String> viewNews(Quartet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>> datas, Triplet<ArticleObject, Short, Byte> infors) {
 		ArrayList<String> view  = new ArrayList<>();
 		StringBuilder tmp = new StringBuilder();
 		// Danh sách bài viết mới nhất
 		ArrayList<ArticleObject> items = datas.getValue0();
 		// Danh sách bài viết xem nhiều nhất
 		ArrayList<ArticleObject> hot_items = datas.getValue1();
+		// Danh sách thể loại
+		ArrayList<CategoryObject> cates = datas.getValue2();
+		// Danh sách tags
+		HashMap<String, Integer> tags = datas.getValue3();
+		
+		ArticleObject similar = infors.getValue0();
+		short page = infors.getValue1();
+		byte totalPerpage = infors.getValue2();
 		
 		tmp.append("<section>");
 		tmp.append("<div class=\"container\">");
 		tmp.append("<div class=\"row\">");
 
 		tmp.append("<div class=\"col-md-9\" data-aos=\"fade-up\">");
-		tmp.append("<h3 class=\"category-title\">Category: Business</h3>");
+		tmp.append(ArticleLibrary.viewCateObtions(cates, similar));
 
 		// Hiển thị mới nhất
 		items.forEach(item -> {
@@ -132,7 +140,7 @@ public class ArticleLibrary {
 
 		tmp.append("<ul class=\"nav nav-pills custom-tab-nav mb-4\" id=\"pills-tab\" role=\"tablist\">");
 		tmp.append("<li class=\"nav-item\" role=\"presentation\">");
-		tmp.append("<button class=\"nav-link\" id=\"pills-trending-tab\" data-bs-toggle=\"pill\" data-bs-target=\"#pills-trending\" type=\"button\" role=\"tab\" aria-controls=\"pills-trending\" aria-selected=\"true\">Xu hướng</button>");
+		tmp.append("<button class=\"nav-link show active\" id=\"pills-trending-tab\" data-bs-toggle=\"pill\" data-bs-target=\"#pills-trending\" type=\"button\" role=\"tab\" aria-controls=\"pills-trending\" aria-selected=\"true\">Xu hướng</button>");
 		tmp.append("</li>");
 		tmp.append("<li class=\"nav-item\" role=\"presentation\">");
 		tmp.append("<button class=\"nav-link\" id=\"pills-latest-tab\" data-bs-toggle=\"pill\" data-bs-target=\"#pills-latest\" type=\"button\" role=\"tab\" aria-controls=\"pills-latest\" aria-selected=\"false\">Mới nhất</button>");
@@ -179,16 +187,21 @@ public class ArticleLibrary {
 		tmp.append("</div><!-- End Video -->");
 
 		tmp.append("<div class=\"aside-block\">");
-		tmp.append("<h3 class=\"aside-title\">Categories</h3>");
+		tmp.append("<h3 class=\"aside-title\">Thể loại</h3>");
 		tmp.append("<ul class=\"aside-links list-unstyled\">");
-		tmp.append("<li><a href=\"category.html\"><i class=\"bi bi-chevron-right\"></i> Business</a></li>");
+		cates.forEach(cate -> {
+			tmp.append("<li><a href=\"/home/tin-tuc?cid="+cate.getCategory_id()+"\"><i class=\"bi bi-chevron-right\"></i> Business</a></li>");
+		});
 		tmp.append("</ul>");
 		tmp.append("</div><!-- End Categories -->");
 
 		tmp.append("<div class=\"aside-block\">");
 		tmp.append("<h3 class=\"aside-title\">Tags</h3>");
 		tmp.append("<ul class=\"aside-tags list-unstyled\">");
-		tmp.append("<li><a href=\"category.html\">Business</a></li>");
+		
+		tags.forEach((tag, number) -> {
+			tmp.append("<li><a href=\"/home/tin-tuc/?tag="+tag+"\">"+tag+" ("+number+")</a></li>");
+		});
 		tmp.append("</ul>");
 		tmp.append("</div><!-- End Tags -->");
 
@@ -200,5 +213,42 @@ public class ArticleLibrary {
 		
 		view.add(tmp.toString());
 		return view;
+	}
+	
+	private static StringBuilder viewCateObtions(ArrayList<CategoryObject> cates, ArticleObject similar) {
+		StringBuilder tmp = new StringBuilder();
+		
+		tmp.append("<div class=\"row align-items-center mb-5\" >");
+		tmp.append("<div class=\"col-sm-2\" >");
+		tmp.append("<h3 class=\"\">Thể loại:</h3>");
+		tmp.append("</div>");
+		
+		tmp.append("<div class=\"col-sm-4\">");
+		tmp.append("<form method=\"\" action=\"\">");
+		tmp.append("<select class=\"form-select\" name=\"slcCateID\" id=\"slcCateID\" onchange=\"refreshCache(this.form)\">");
+		tmp.append("<option value=\"0\" selected>--chọn--</option>");
+		cates.forEach(cate -> {
+			if(cate.getCategory_id() == similar.getArticle_category_id()) {
+				tmp.append("<option value=\"").append(cate.getCategory_id()).append("\" selected>");
+			} else {
+				tmp.append("<option value=\"").append(cate.getCategory_id()).append("\">");
+			}
+			tmp.append(cate.getCategory_name());
+			tmp.append("</option>");
+		});
+		tmp.append("</select>");
+		tmp.append("</form>");
+		tmp.append("</div>");
+		tmp.append("</div>");
+		
+		tmp.append("<script language=\"javascript\">");
+		tmp.append("function refreshCache(fn) {");
+		tmp.append("let cateID = fn.slcCateID.value;");
+		tmp.append("fn.method = 'post';");
+		tmp.append("fn.action = `/home/tin-tuc?cid=${cateID}`;");
+		tmp.append("fn.submit();");
+		tmp.append("}");
+		tmp.append("</script>");
+		return tmp;
 	}
 }

@@ -2,6 +2,7 @@
 file jsp chuyên dùng để lấy dữ liệu
  -->
 
+<%@page import="jsoft.library.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="jsoft.*, jsoft.object.*" %>
@@ -29,6 +30,10 @@ file jsp chuyên dùng để lấy dữ liệu
 	similar.setArticle_section_id((short)2);
 	
 	if(at != -1) { // Lấy cấu trúc trang con
+		// short cid = Utilities.getShortParam(request, "cid");
+		// System.out.println(cid);
+		// similar.setArticle_category_id(cid);
+		
 		Triplet<ArticleObject, Short, Byte> infors = new Triplet<>(similar, (short)1, (byte)10);
 		ArrayList<String> news = ac.viewNews(infors);
 		if(news.size() > 0) {

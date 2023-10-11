@@ -3,7 +3,6 @@ package jsoft.home.article;
 import jsoft.*;
 import jsoft.object.*;
 import java.util.*;
-import java.sql.*;
 import org.javatuples.*;
 
 public class ArticleControl {
@@ -31,8 +30,10 @@ public class ArticleControl {
 	}
 	
 	public ArrayList<String> viewNews(Triplet<ArticleObject, Short, Byte> infors) {
-		Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> datas = this.am.getArticleObjects(infors);
+		Quartet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>> datas = this.am.getNewsArticleObjects(infors);
 		
-		return ArticleLibrary.viewNews(datas);
+		// cho infors để vừa phân trang, vửa định vị ví combobook
+		return ArticleLibrary.viewNews(datas, infors);
 	}
+	
 }
