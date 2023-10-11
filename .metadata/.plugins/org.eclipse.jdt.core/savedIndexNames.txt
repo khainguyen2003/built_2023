@@ -37,7 +37,6 @@ INDEX VERSION 1.132+D:\JP302_Khai\built_2023\.metadata\.plugins\org.eclipse.jdt.
 3702833720.index
 3659830398.index
 3241304024.index
-2871916939.index
 3156198320.index
 151236794.index
 2968203074.index
