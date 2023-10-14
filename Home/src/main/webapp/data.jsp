@@ -30,9 +30,9 @@ file jsp chuyên dùng để lấy dữ liệu
 	similar.setArticle_section_id((short)2);
 	
 	if(at != -1) { // Lấy cấu trúc trang con
-		// short cid = Utilities.getShortParam(request, "cid");
+		short cid = Utilities.getShortParam(request, "cid");
 		// System.out.println(cid);
-		// similar.setArticle_category_id(cid);
+		similar.setArticle_category_id(cid);
 		
 		Triplet<ArticleObject, Short, Byte> infors = new Triplet<>(similar, (short)1, (byte)10);
 		ArrayList<String> news = ac.viewNews(infors);

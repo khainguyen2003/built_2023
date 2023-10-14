@@ -122,6 +122,14 @@ public class UserModel {
 		return item;
 	}
 
+	/** Phương thức lấy về danh sách user và tổng số bản ghi
+	 * 
+	 * @param similar: lưu trữ các giá trị để dùng làm điều kiện where khi truy nhập dữ liệu
+	 * @param page trang hiện tại
+	 * @param total tổng số bản ghi trên trang hiện tại
+	 * @param type kiểu sắp xếp
+	 * @return cặp danh sách users và tổng số bản ghi lấy được
+	 */
 	public Pair<ArrayList<UserObject>, Integer> getUserObjects(UserObject similar, short page, byte total,
 			USER_SORT_TYPE type) {
 
