@@ -23,14 +23,14 @@ public class ArticleControl {
 		return this.am.getArticleObject(id);
 	}
 	// giá trị truyền vào: đối tượng article, trang khởi đầu, số bài viết trên 1 trang
-	public ArrayList<String> viewPostGrid(Triplet<ArticleObject, Short, Byte> infors) {
+	public ArrayList<String> viewPostGrid(Quartet<ArticleObject, Short, Byte, Boolean> infors) {
 		Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> datas = this.am.getArticleObjects(infors);
 		
 		return ArticleLibrary.viewPostGrid(datas);
 	}
 	
-	public ArrayList<String> viewNews(Triplet<ArticleObject, Short, Byte> infors) {
-		Quartet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>> datas = this.am.getNewsArticleObjects(infors);
+	public ArrayList<String> viewNews(Quartet<ArticleObject, Short, Byte, Boolean> infors) {
+		Sextet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>, Integer, ArrayList<ArticleObject>> datas = this.am.getNewsArticleObjects(infors);
 		
 		// cho infors để vừa phân trang, vửa định vị ví combobook
 		return ArticleLibrary.viewNews(datas, infors);

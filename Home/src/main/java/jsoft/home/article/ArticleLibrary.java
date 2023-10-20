@@ -15,7 +15,7 @@ public class ArticleLibrary {
 		ArrayList<ArticleObject> hot_items = datas.getValue1();
 		
 		if(items.size() > 0) {
-			// Vị trí đầu tiên
+			// bài viết đầu tiên mới nhất
 			ArticleObject item = items.get(0);
 			tmp.append("<div class=\"post-entry-1 lg\">");
 			tmp.append("	<a href=\"single-post.html\"><img");
@@ -78,10 +78,11 @@ public class ArticleLibrary {
 		return view;
 	}
 	
-	public static ArrayList<String> viewNews(Quartet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>> datas, Triplet<ArticleObject, Short, Byte> infors) {
+	public static ArrayList<String> viewNews(Sextet<ArrayList<ArticleObject>,
+			ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>, Integer, ArrayList<ArticleObject>> datas, Quartet<ArticleObject, Short, Byte, Boolean> infors) {
 		ArrayList<String> view  = new ArrayList<>();
 		StringBuilder tmp = new StringBuilder();
-		// Danh sách bài viết mới nhất
+		// Danh sách bài viết mới nhất ko phân trang(sidebar)
 		ArrayList<ArticleObject> items = datas.getValue0();
 		// Danh sách bài viết xem nhiều nhất
 		ArrayList<ArticleObject> hot_items = datas.getValue1();
@@ -89,6 +90,10 @@ public class ArticleLibrary {
 		ArrayList<CategoryObject> cates = datas.getValue2();
 		// Danh sách tags
 		HashMap<String, Integer> tags = datas.getValue3();
+		// Tống số bài viết
+		int total = datas.getValue4();
+		// Danh sách bài viết mới nhất có phân trang
+		ArrayList<ArticleObject> pitems = datas.getValue5();
 		
 		ArticleObject similar = infors.getValue0();
 		short page = infors.getValue1();
@@ -102,7 +107,7 @@ public class ArticleLibrary {
 		tmp.append(ArticleLibrary.viewCateObtions(cates, similar));
 
 		// Hiển thị mới nhất
-		items.forEach(item -> {
+		pitems.forEach(item -> {
 			tmp.append("<div class=\"d-md-flex post-entry-2 half\">");
 			tmp.append("<a href=\"/home/tin-tuc/?id=\" class=\"me-4 thumbnail\">");
 			tmp.append("<img src=\""+item.getArticle_image()+"\" alt=\""+item.getArticle_title()+"\" class=\"img-fluid\">");
@@ -121,26 +126,35 @@ public class ArticleLibrary {
 			tmp.append("</div>");	
 		});
 
-		tmp.append("<div class=\"text-start py-4\">");
-		tmp.append("<div class=\"custom-pagination\">");
-		tmp.append("<a href=\"#\" class=\"prev\">Prevous</a>");
-		tmp.append("<a href=\"#\" class=\"active\">1</a>");
-		tmp.append("<a href=\"#\">2</a>");
-		tmp.append("<a href=\"#\">3</a>");
-		tmp.append("<a href=\"#\">4</a>");
-		tmp.append("<a href=\"#\">5</a>");
-		tmp.append("<a href=\"#\" class=\"next\">Next</a>");
-		tmp.append("</div>");
-		tmp.append("</div>");
-		tmp.append("</div>");
+		// Phân trang
+		tmp.append(ArticleLibrary.getPagination("/home/tin-tuc?cid="+similar.getArticle_category_id()+"", total, page, totalPerpage));
+		tmp.append("</div>"); // col-md-9
+		
+		tmp.append(ArticleLibrary.viewSideBar(items, hot_items, cates, tags));
 
+		
+
+		tmp.append("</div>");
+		tmp.append("</div>");
+		tmp.append("</section>");
+		
+		view.add(tmp.toString());
+		return view;
+	}
+	
+	public static StringBuilder viewSideBar(
+			ArrayList<ArticleObject> newest_items, 
+			ArrayList<ArticleObject> hot_items,
+			ArrayList<CategoryObject> cates,
+			HashMap<String, Integer> tags) {
+		StringBuilder tmp = new StringBuilder();
 		tmp.append("<div class=\"col-md-3\">");
 		tmp.append("<!-- ======= Sidebar ======= -->");
 		tmp.append("<div class=\"aside-block\">");
 
 		tmp.append("<ul class=\"nav nav-pills custom-tab-nav mb-4\" id=\"pills-tab\" role=\"tablist\">");
 		tmp.append("<li class=\"nav-item\" role=\"presentation\">");
-		tmp.append("<button class=\"nav-link show active\" id=\"pills-trending-tab\" data-bs-toggle=\"pill\" data-bs-target=\"#pills-trending\" type=\"button\" role=\"tab\" aria-controls=\"pills-trending\" aria-selected=\"true\">Xu hướng</button>");
+		tmp.append("<button class=\"nav-link active\" id=\"pills-trending-tab\" data-bs-toggle=\"pill\" data-bs-target=\"#pills-trending\" type=\"button\" role=\"tab\" aria-controls=\"pills-trending\" aria-selected=\"true\">Xu hướng</button>");
 		tmp.append("</li>");
 		tmp.append("<li class=\"nav-item\" role=\"presentation\">");
 		tmp.append("<button class=\"nav-link\" id=\"pills-latest-tab\" data-bs-toggle=\"pill\" data-bs-target=\"#pills-latest\" type=\"button\" role=\"tab\" aria-controls=\"pills-latest\" aria-selected=\"false\">Mới nhất</button>");
@@ -149,21 +163,19 @@ public class ArticleLibrary {
 
 		tmp.append("<div class=\"tab-content\" id=\"pills-tabContent\">");
 		tmp.append("<!-- Trending -->");
+		tmp.append("<div class=\"tab-pane fade show active\" id=\"pills-trending\" role=\"tabpanel\" aria-labelledby=\"pills-trending-tab\">");
 		hot_items.forEach(item -> {
-			if(items.indexOf(item) < 5) {
-				tmp.append("<div class=\"tab-pane fade\" id=\"pills-trending\" role=\"tabpanel\" aria-labelledby=\"pills-trending-tab\">");
 				tmp.append("<div class=\"post-entry-1 border-bottom\">");
 				tmp.append("<div class=\"post-meta\"><span class=\"date\">"+item.getCategory_name()+"</span> <span class=\"mx-1\">&bullet;</span> <span>"+item.getArticle_created_date()+"</span></div>");
 				tmp.append("<h2 class=\"mb-2\"><a href=\"/home/tin-tuc?id=\">"+item.getArticle_title()+"</a></h2>");
 				tmp.append("<span class=\"author mb-3 d-block\">"+item.getArticle_author_name()+"</span>");
 				tmp.append("</div>");
-				tmp.append("</div> <!-- End Trending -->");
-			}
 		});
+		tmp.append("</div> <!-- End Trending -->");
 
 		tmp.append("<!-- Latest -->");
 		tmp.append("<div class=\"tab-pane fade\" id=\"pills-latest\" role=\"tabpanel\" aria-labelledby=\"pills-latest-tab\">");
-		items.forEach(item -> {
+		newest_items.forEach(item -> {
 			tmp.append("<div class=\"post-entry-1 border-bottom\">");
 			tmp.append("<div class=\"post-meta\"><span class=\"date\">"+item.getCategory_name()+"</span> <span class=\"mx-1\">&bullet;</span> <span>"+item.getArticle_created_date()+"</span></div>");
 			tmp.append("<h2 class=\"mb-2\"><a href=\"#\">"+item.getArticle_summary()+"</a></h2>");
@@ -206,13 +218,8 @@ public class ArticleLibrary {
 		tmp.append("</div><!-- End Tags -->");
 
 		tmp.append("</div>");
-
-		tmp.append("</div>");
-		tmp.append("</div>");
-		tmp.append("</section>");
 		
-		view.add(tmp.toString());
-		return view;
+		return tmp;
 	}
 	
 	private static StringBuilder viewCateObtions(ArrayList<CategoryObject> cates, ArticleObject similar) {
@@ -225,8 +232,8 @@ public class ArticleLibrary {
 		
 		tmp.append("<div class=\"col-sm-4\">");
 		tmp.append("<form method=\"\" action=\"\">");
-		tmp.append("<select class=\"form-select\" name=\"slcCateID\" id=\"slcCateID\" onchange=\"refreshCache(this.form)\">");
-		tmp.append("<option value=\"0\" selected>--chọn--</option>");
+		tmp.append("<select class=\"form-select\" name=\"slcCateID\" id=\"slcCateID\">");
+		tmp.append("<option value=\"0\">--chọn--</option>");
 		cates.forEach(cate -> {
 			if(cate.getCategory_id() == similar.getArticle_category_id()) {
 				tmp.append("<option value=\"").append(cate.getCategory_id()).append("\" selected>");
@@ -242,13 +249,79 @@ public class ArticleLibrary {
 		tmp.append("</div>");
 		
 		tmp.append("<script language=\"javascript\">");
-		tmp.append("function refreshCache(fn) {");
+		tmp.append("function refreshCache(e) {");
+		tmp.append("let fn = e.target.form; ");
 		tmp.append("let cateID = fn.slcCateID.value;");
 		tmp.append("fn.method = 'post';");
 		tmp.append("fn.action = `/home/tin-tuc?cid=${cateID}`;");
 		tmp.append("fn.submit();");
 		tmp.append("}");
+		tmp.append("let fn = document.getElementById('slcCateID');");
+		tmp.append("if(fn != null) {");
+		tmp.append("fn.addEventListener('change', refreshCache);");
+		tmp.append("}");
 		tmp.append("</script>");
 		return tmp;
+	}
+	
+	private static String getPagination(String url, int totalRecord, short page, byte recordsPerPage) {
+		// Nếu url chưa có tham số thì thêm ?, nếu có thì thêm &
+		if(url.indexOf("?") != -1) {
+			url += "&";
+		} else {
+			url += "?";
+		}
+		// Tính toán tổng số trang
+		int countPages = totalRecord / recordsPerPage;
+		if(totalRecord % recordsPerPage != 0)
+			countPages++;
+		if(page > countPages || page <= 0) {
+			page = 1;
+		}
+		StringBuilder tmp = new StringBuilder();
+
+		tmp.append("<div class=\"text-start py-4 row\" >");
+		tmp.append("<div class=\"custom-pagination\">");
+		tmp.append("<a class=\"prev\" href=\""+url+"page="+((page > 1) ? (page - 1) : page)+"\" ><span aria-hidden=\"true\">&laquo;</span></a>");
+
+		// left current
+		String leftCurrent = "";
+		int count = 0;
+		for(int i = page - 1; i > 0; i--) {
+			leftCurrent = "<a  href=\""+url+"page="+i+"\">"+i+"</a>" + leftCurrent;
+			if(++count >= 2) {
+				break;
+			}
+		}
+		if(page > 4) {
+			leftCurrent = "<a  href=\""+url+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">1</span></a></li>" + "<a class=\" disabled\" href=\"#\">...</a>" + leftCurrent;
+		}
+		tmp.append(leftCurrent);
+		tmp.append("<a class=\"active\" href=\""+url+"page="+page+"\">"+page+"</a>");
+		
+		// right current
+		String rightCurrent = "";
+		count = 0;
+		for(int i = page + 1; i < countPages; i++) {
+			System.out.println(i);
+			rightCurrent += "<a href=\""+url+"page="+i+"\">"+i+"</a>";
+			if(++count >= 2) {
+				break;
+			}
+		}
+		if(countPages > page + 2) {
+			rightCurrent += "<a class=\"recordsPerPage\" href=\"#\">...</a>";
+		}
+		tmp.append(rightCurrent);
+		if(page != countPages) {
+			tmp.append("<a  href=\""+url+"page="+countPages+"\" tabindex=\"-1\" aria-disabled=\"true\" ><span aria-hidden=\"true\">"+countPages+"</span></a>");
+		}
+		
+		tmp.append("<a class=\"next\" href=\""+url+"page="+((page < countPages) ? (page + 1) : page)+"\" ><span aria-hidden=\"true\">&raquo;</span></a>");
+		
+		tmp.append("</div>");
+		tmp.append("</div>");
+		
+		return tmp.toString();
 	}
 }

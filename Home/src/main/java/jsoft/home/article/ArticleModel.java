@@ -51,7 +51,7 @@ public class ArticleModel {
 		return item;
 	}
 	// lấy về 1 cặp các article mới nhất và xem nhiều nhất
-	public Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> getArticleObjects(Triplet<ArticleObject, Short, Byte> infors) {
+	public Pair<ArrayList<ArticleObject>, ArrayList<ArticleObject>> getArticleObjects(Quartet<ArticleObject, Short, Byte, Boolean> infors) {
 		ArrayList<ResultSet> res = this.a.getArticles(infors);
 		return new Pair<>(this.getArticleObjects(res.get(0)), this.getArticleObjects(res.get(1)));
 	}
@@ -59,7 +59,9 @@ public class ArticleModel {
 	 * Phương thức lấy 
 	 * giá trị 4 là cặp tag và số lượng tag
 	 */
-	public Quartet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, ArrayList<CategoryObject>, HashMap<String, Integer>> getNewsArticleObjects(Triplet<ArticleObject, Short, Byte> infors) {
+	public Sextet<ArrayList<ArticleObject>, ArrayList<ArticleObject>, 
+				ArrayList<CategoryObject>, HashMap<String, Integer>, Integer, ArrayList<ArticleObject>> 
+			getNewsArticleObjects(Quartet<ArticleObject, Short, Byte, Boolean> infors) {
 		ArrayList<ResultSet> res = this.a.getArticles(infors);
 		
 		ArrayList<CategoryObject> cates = new ArrayList<>();
@@ -112,8 +114,25 @@ public class ArticleModel {
 		tags.keySet().removeAll(tags.entrySet().stream().filter(a -> a.getValue().compareTo(3) < 0)
 				.map(e -> e.getKey()).collect(Collectors.toList()));
 		
+		int total = 0;
+		if(!infors.getValue3()) {
+			// Lấy tổng số bài viết
+			rs = res.get(5);
+			if(rs != null) {
+				try {
+					if(rs.next()) {
+						total = rs.getInt("total");
+					}
+					rs.close();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
+		
 		// Thêm vào vị trí cuối
-		return new Quartet<>(this.getArticleObjects(res.get(0)), this.getArticleObjects(res.get(1)), cates, tags);
+		return new Sextet<>(this.getArticleObjects(res.get(0)), this.getArticleObjects(res.get(1)), cates, tags, total, this.getArticleObjects(res.get(4)));
 	}
 	
 	private ArrayList<ArticleObject> getArticleObjects(ResultSet rs) {

@@ -6,8 +6,12 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="createCell("/>
+		<item key="selection" value="class=\&quot;\&quot;"/>
 		<list key="findhistory">
+			<item value="class=\&quot;\&quot;"/>
+			<item value="page-link"/>
+			<item value="&lt;/li&gt;"/>
+			<item value="&lt;li class=\&quot;page-item\&quot;&gt;"/>
 			<item value="createCell("/>
 			<item value=".indexof"/>
 			<item value="\\"/>
@@ -19,12 +23,9 @@
 			<item value="assets/vendor/"/>
 			<item value="assets/css/"/>
 			<item value="assets/img/"/>
-			<item value="//"/>
-			<item value="out"/>
-			<item value="input-password"/>
-			<item value="class=\&quot;input-password\&quot;"/>
 		</list>
 		<list key="replacehistory">
+			<item value=""/>
 			<item value="createCell(sheet,"/>
 			<item value="/"/>
 			<item value="/home/img/"/>
@@ -33,7 +34,6 @@
 			<item value="/home/vendor/"/>
 			<item value="/home/css/"/>
 			<item value="/home/img"/>
-			<item value=""/>
 			<item value="tmp"/>
 			<item value="class=\&quot;show-btn\&quot;"/>
 			<item value="page="/>

@@ -28,20 +28,21 @@ file jsp chuyên dùng để lấy dữ liệu
 	
 	ArticleObject similar = new ArticleObject();
 	similar.setArticle_section_id((short)2);
-	
+	short curPage = Utilities.getShortPage(request, "page");
 	if(at != -1) { // Lấy cấu trúc trang con
 		short cid = Utilities.getShortParam(request, "cid");
+	
 		// System.out.println(cid);
 		similar.setArticle_category_id(cid);
 		
-		Triplet<ArticleObject, Short, Byte> infors = new Triplet<>(similar, (short)1, (byte)10);
+		Quartet<ArticleObject, Short, Byte, Boolean> infors = new Quartet<>(similar, curPage, (byte)3, false);
 		ArrayList<String> news = ac.viewNews(infors);
 		if(news.size() > 0) {
 			session.setAttribute("news", news.get(0));
 		}
 	} else {
 		// giá trị truyền vào: đối tượng article, trang khởi đầu, số bài viết trên 1 trang
-		Triplet<ArticleObject, Short, Byte> infors = new Triplet<>(similar, (short)1, (byte)5);
+		Quartet<ArticleObject, Short, Byte, Boolean> infors = new Quartet<>(similar, curPage, (byte)5, true);
 		ArrayList<String> postGrid = ac.viewPostGrid(infors);
 		
 		session.setAttribute("postGrid", postGrid);
